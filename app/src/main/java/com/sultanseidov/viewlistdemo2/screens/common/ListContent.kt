@@ -1,5 +1,6 @@
 package com.sultanseidov.viewlistdemo2.screens.common
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -106,7 +108,7 @@ fun MovieItem(movieItem: MovieModel) {
                 ContextCompat.startActivity(context, browserIntent, null)
                  */
             }
-            .height(100.dp)
+            .height(400.dp)
             .fillMaxWidth(),
         contentAlignment = Alignment.BottomCenter
     ) {

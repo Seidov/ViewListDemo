@@ -8,7 +8,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 import com.sultanseidov.viewlistdemo2.navigation.Screen
-import com.sultanseidov.viewlistdemo2.screens.common.MovieList
+import com.sultanseidov.viewlistdemo2.screens.common.DynamicPagerScreen
 import com.sultanseidov.viewlistdemo2.viewmodel.HomeViewModel
 
 @ExperimentalCoilApi
@@ -30,7 +30,8 @@ fun HomeScreen(
         }
         ,
         content = {
-            MovieList(lazyMovieItems = getPopularMovies)
+            //MovieList(lazyMovieItems = getPopularMovies)
+            DynamicPagerScreen()
         }
     )
 }
