@@ -6,11 +6,12 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ITmdbApi {
-
-    @GET("movie/popular")
+    @GET("discover/movie")
     suspend fun getPopularMovies(
         @Query("api_key") api_key: String,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("sort_by") sort_by: String = "popularity.desc",
+        @Query("with_genres") with_genres: String
     ): Response<ResponsePopularMoviesModel>
 
 }

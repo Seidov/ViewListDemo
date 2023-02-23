@@ -1,5 +1,6 @@
 package com.sultanseidov.viewlistdemo2.data.entity
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
@@ -21,5 +22,5 @@ data class MovieModel(
     @SerializedName("vote_average")
     val rating: String?,
     @SerializedName("release_date")
-    val releaseDate: String?,
+    val releaseDate: String?
 ) : Serializable

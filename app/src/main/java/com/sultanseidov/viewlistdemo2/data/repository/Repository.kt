@@ -18,11 +18,11 @@ class Repository @Inject constructor(
     private val appDatabase: AppDatabase
 ) {
 
-    fun getPopularMovies(): Flow<PagingData<MovieModel>> {
+    fun getPopularMovies(with_genres:String): Flow<PagingData<MovieModel>> {
         val pagingSourceFactory = { appDatabase.popularMoviesDao().getAllPopularMovies() }
         return Pager(
             config = PagingConfig(pageSize = ITEMS_PER_PAGE),
-            remoteMediator = PopularMoviesRemoteMediator(iTmdbApi, appDatabase),
+            remoteMediator = PopularMoviesRemoteMediator(iTmdbApi, appDatabase,with_genres),
             pagingSourceFactory = pagingSourceFactory
         ).flow
     }

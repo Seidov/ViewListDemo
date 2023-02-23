@@ -20,7 +20,8 @@ import javax.inject.Inject
 @OptIn(ExperimentalPagingApi::class)
 class PopularMoviesRemoteMediator @Inject constructor(
     private val iTmdbApi: ITmdbApi,
-    private val appDatabase: AppDatabase
+    private val appDatabase: AppDatabase,
+    private val with_genres: String
 ) : RemoteMediator<Int, MovieModel>() {
 
     private val popularMoviesDao = appDatabase.popularMoviesDao()
@@ -59,7 +60,7 @@ class PopularMoviesRemoteMediator @Inject constructor(
                     nextPage
                 }
             }
-            val response = iTmdbApi.getPopularMovies(api_key =API_KEY ,page = currentPage)
+            val response = iTmdbApi.getPopularMovies(api_key =API_KEY ,page = currentPage, with_genres = with_genres)
             var endOfPaginationReached = false
             if (response.isSuccessful) {
                 val responseData = response.body()

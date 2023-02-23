@@ -1,4 +1,4 @@
-package com.sultanseidov.viewlistdemo2.screens.home
+package com.sultanseidov.viewlistdemo2.screens.discover
 
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -19,7 +19,7 @@ fun HomeTopBar(
                 color = MaterialTheme.colors.topAppBarContentColor
             )
         },
-        backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor,
+        backgroundColor = MaterialTheme.colors.secondary,
         actions = {
             IconButton(onClick = onSearchClicked) {
                 Icon(
