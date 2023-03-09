@@ -1,4 +1,4 @@
-package com.sultanseidov.viewlistdemo2.data.local
+package com.sultanseidov.viewlistdemo2.data.local.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao

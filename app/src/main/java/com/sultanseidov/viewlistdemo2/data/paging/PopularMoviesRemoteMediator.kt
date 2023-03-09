@@ -1,20 +1,16 @@
 package com.sultanseidov.viewlistdemo2.data.paging
 
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.sultanseidov.viewlistdemo2.BuildConfig
 import com.sultanseidov.viewlistdemo2.BuildConfig.API_KEY
 import com.sultanseidov.viewlistdemo2.data.entity.MovieModel
 import com.sultanseidov.viewlistdemo2.data.entity.PopularMoviesRemoteKeys
-import com.sultanseidov.viewlistdemo2.data.local.AppDatabase
+import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
 import com.sultanseidov.viewlistdemo2.data.remote.ITmdbApi
-import retrofit2.HttpException
-import java.io.IOException
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -60,7 +56,13 @@ class PopularMoviesRemoteMediator @Inject constructor(
                     nextPage
                 }
             }
-            val response = iTmdbApi.getPopularMovies(api_key =API_KEY ,page = currentPage, with_genres = with_genres)
+
+            val response = iTmdbApi.getPopularMovies(
+                api_key = API_KEY,
+                page = currentPage,
+                with_genres = with_genres
+            )
+
             var endOfPaginationReached = false
             if (response.isSuccessful) {
                 val responseData = response.body()

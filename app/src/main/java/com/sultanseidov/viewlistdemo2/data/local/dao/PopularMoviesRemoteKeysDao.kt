@@ -1,4 +1,4 @@
-package com.sultanseidov.viewlistdemo2.data.local
+package com.sultanseidov.viewlistdemo2.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

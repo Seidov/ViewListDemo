@@ -2,7 +2,7 @@ package com.sultanseidov.viewlistdemo2.di
 
 import android.content.Context
 import androidx.room.Room
-import com.sultanseidov.viewlistdemo2.data.local.AppDatabase
+import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
 import com.sultanseidov.viewlistdemo2.util.Constants.APP_DATABASE
 import dagger.Module
 import dagger.Provides

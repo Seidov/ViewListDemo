@@ -6,7 +6,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.paging.ExperimentalPagingApi
+import com.sultanseidov.viewlistdemo2.screens.common.tab.StaticPagerScreen
 
+@OptIn(ExperimentalPagingApi::class)
 @Composable
 fun ViewListScreen(
     selectCourse: (Long) -> Unit,
@@ -14,10 +17,9 @@ fun ViewListScreen(
 ){
     Column(
         modifier = modifier
-            .verticalScroll(rememberScrollState())
             .statusBarsPadding()
     ) {
-
+        StaticPagerScreen()
     }
 }
 

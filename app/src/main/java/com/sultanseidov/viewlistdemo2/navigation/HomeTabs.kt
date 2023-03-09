@@ -25,27 +25,27 @@ import androidx.navigation.compose.composable
 import androidx.paging.ExperimentalPagingApi
 import coil.annotation.ExperimentalCoilApi
 import com.sultanseidov.viewlistdemo2.R
-import com.sultanseidov.viewlistdemo2.screens.discover.TabLayout
+import com.sultanseidov.viewlistdemo2.screens.discover.DiscoverScreen
 import com.sultanseidov.viewlistdemo2.screens.search.SearchScreen
 import com.sultanseidov.viewlistdemo2.screens.viewlist.ViewListScreen
 
 @OptIn(ExperimentalPagingApi::class, ExperimentalCoilApi::class)
 fun NavGraphBuilder.home(
     onCourseSelected: (Long, NavBackStackEntry) -> Unit,
-    onboardingComplete: State<Boolean>,
+    onBoardingComplete: State<Boolean>,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     composable(Tabs.DISCOVER.route) { from ->
 
         // Show onboarding instead if not shown yet.
-        LaunchedEffect(onboardingComplete) {
-            if (!onboardingComplete.value) {
+        LaunchedEffect(onBoardingComplete) {
+            if (!onBoardingComplete.value) {
                 navController.navigate(MainDestinations.ONBOARDING_ROUTE)
             }
         }
-        if (onboardingComplete.value) { // Avoid glitch when showing onboarding
-            TabLayout(navController = navController)
+        if (onBoardingComplete.value) { // Avoid glitch when showing onboarding
+            DiscoverScreen(navController = navController)
         }
     }
     composable(Tabs.VIEWLIST.route) { from ->

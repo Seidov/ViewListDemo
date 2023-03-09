@@ -1,6 +1,5 @@
-package com.sultanseidov.viewlistdemo2.screens.common
+package com.sultanseidov.viewlistdemo2.screens.common.movielist
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,6 +28,9 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberAsyncImagePainter
 import com.sultanseidov.viewlistdemo2.R
 import com.sultanseidov.viewlistdemo2.data.entity.MovieModel
+import com.sultanseidov.viewlistdemo2.screens.common.ErrorItem
+import com.sultanseidov.viewlistdemo2.screens.common.LoadingItem
+import com.sultanseidov.viewlistdemo2.screens.common.LoadingView
 import com.sultanseidov.viewlistdemo2.ui.theme.StarRed
 import com.sultanseidov.viewlistdemo2.util.Constants.IMAGE_BASE_URL
 
@@ -92,8 +94,7 @@ fun MovieItem(movieItem: MovieModel) {
     val context = LocalContext.current
 
     val painter = rememberAsyncImagePainter(
-        model = IMAGE_BASE_URL + movieItem.posterPath,
-        imageLoader = ImageLoader.Builder(context).crossfade(true).build()
+        model = IMAGE_BASE_URL + movieItem.posterPath
     )
 
     Box(

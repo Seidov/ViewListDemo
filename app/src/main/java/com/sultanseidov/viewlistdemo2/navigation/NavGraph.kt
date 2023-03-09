@@ -62,7 +62,7 @@ fun NavGraph(
         ) {
             home(
                 onCourseSelected = actions.openCourse,
-                onboardingComplete = onboardingComplete,
+                onBoardingComplete = onboardingComplete,
                 navController = navController,
                 modifier = modifier
             )
