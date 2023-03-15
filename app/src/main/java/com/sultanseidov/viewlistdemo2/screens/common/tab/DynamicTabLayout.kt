@@ -13,7 +13,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.*
 import com.google.accompanist.pager.rememberPagerState
-import com.sultanseidov.viewlistdemo2.data.entity.GenreModel
+import com.sultanseidov.viewlistdemo2.data.entity.genre.GenreModel
 import com.sultanseidov.viewlistdemo2.screens.common.movielist.MovieList
 import com.sultanseidov.viewlistdemo2.viewmodel.DiscoverViewModel
 import kotlinx.coroutines.launch

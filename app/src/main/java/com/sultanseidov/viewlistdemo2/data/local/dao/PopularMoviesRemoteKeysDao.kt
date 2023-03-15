@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sultanseidov.viewlistdemo2.data.entity.PopularMoviesRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesRemoteKeys
 
 @Dao
 interface PopularMoviesRemoteKeysDao {

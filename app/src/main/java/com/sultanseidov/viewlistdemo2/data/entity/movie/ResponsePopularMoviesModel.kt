@@ -1,6 +1,5 @@
-package com.sultanseidov.viewlistdemo2.data.entity
+package com.sultanseidov.viewlistdemo2.data.entity.movie
 
-import androidx.room.Embedded
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -8,5 +7,5 @@ data class ResponsePopularMoviesModel(
     @SerializedName("page")
     val page: Int = 1,
     @SerializedName("results")
-    val movies: List<MovieModel>,
+    val movies: List<PopularMoviesModel>,
 ) : Serializable

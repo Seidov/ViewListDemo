@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
-import com.sultanseidov.viewlistdemo2.data.entity.GenreModel
-import com.sultanseidov.viewlistdemo2.data.entity.MovieModel
-import com.sultanseidov.viewlistdemo2.data.entity.ResponseGenresListModel
+import com.sultanseidov.viewlistdemo2.data.entity.genre.GenreModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
+import com.sultanseidov.viewlistdemo2.data.entity.genre.ResponseGenresListModel
 import com.sultanseidov.viewlistdemo2.data.entity.base.ResourceState
 import com.sultanseidov.viewlistdemo2.data.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,7 +32,7 @@ class TestViewModel @Inject constructor(
     val genresState: State<ResourceState<ResponseGenresListModel>> = _genresState
 
     private var _popularMoviesByGenre =  repository.getPopularMovies("")
-    var popularMoviesByGenre: Flow<PagingData<MovieModel>> =
+    var popularMoviesByGenre: Flow<PagingData<PopularMoviesModel>> =
         _popularMoviesByGenre
 
     fun fetchGenres() {
@@ -49,7 +49,7 @@ class TestViewModel @Inject constructor(
         }
     }
 
-    fun getPopularMoviesByGenre2(id: String): Flow<PagingData<MovieModel>> {
+    fun getPopularMoviesByGenre2(id: String): Flow<PagingData<PopularMoviesModel>> {
         return repository.getPopularMovies(id)
     }
 

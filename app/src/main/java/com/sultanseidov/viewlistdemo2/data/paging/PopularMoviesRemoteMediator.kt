@@ -1,14 +1,16 @@
 package com.sultanseidov.viewlistdemo2.data.paging
 
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.sultanseidov.viewlistdemo2.BuildConfig.API_KEY
-import com.sultanseidov.viewlistdemo2.data.entity.MovieModel
-import com.sultanseidov.viewlistdemo2.data.entity.PopularMoviesRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.entity.myviewlist.MyViewListModel
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
 import com.sultanseidov.viewlistdemo2.data.remote.ITmdbApi
 import javax.inject.Inject
@@ -18,8 +20,10 @@ class PopularMoviesRemoteMediator @Inject constructor(
     private val iTmdbApi: ITmdbApi,
     private val appDatabase: AppDatabase,
     private val with_genres: String
-) : RemoteMediator<Int, MovieModel>() {
+) : RemoteMediator<Int, PopularMoviesModel>() {
 
+
+    private val myViewListDao = appDatabase.myViewListDao()
     private val popularMoviesDao = appDatabase.popularMoviesDao()
     private val popularMoviesRemoteKeysDao = appDatabase.popularMoviesRemoteKeysDao()
 
@@ -31,7 +35,7 @@ class PopularMoviesRemoteMediator @Inject constructor(
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, MovieModel>
+        state: PagingState<Int, PopularMoviesModel>
     ): MediatorResult {
         return try {
             val currentPage = when (loadType) {
@@ -89,8 +93,17 @@ class PopularMoviesRemoteMediator @Inject constructor(
                                 lastUpdated = System.currentTimeMillis()
                             )
                         }
+
                         popularMoviesRemoteKeysDao.addAllRemoteKeys(remoteKeys = keys!!)
+
+                        Log.e("FUCK", "popularMoviesRemoteKeysDao has got and declared!!" )
+
                         popularMoviesDao.addPopularMovies(popularMovies = responseData.movies)
+
+                        Log.e("FUCK", "popularMoviesDao has got and declared!!" )
+
+                        //myViewListDao.addAllMyListView(myViewList = responseData.movies)
+                        Log.e("FUCK", "myViewListDao has got and declared! : " + myViewListDao.getAllMyListView() )
                     }
                 }
 
@@ -100,10 +113,12 @@ class PopularMoviesRemoteMediator @Inject constructor(
         } catch (e: Exception) {
             return MediatorResult.Error(e)
         }
+
+        Log.e("FUCK", "load method finished has got and declared!!" )
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, MovieModel>,
+        state: PagingState<Int, PopularMoviesModel>,
     ): PopularMoviesRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.movieId?.let { id ->
@@ -113,7 +128,7 @@ class PopularMoviesRemoteMediator @Inject constructor(
     }
 
     private suspend fun getRemoteKeyForFirstItem(
-        state: PagingState<Int, MovieModel>,
+        state: PagingState<Int, PopularMoviesModel>,
     ): PopularMoviesRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { movie ->
@@ -122,7 +137,7 @@ class PopularMoviesRemoteMediator @Inject constructor(
     }
 
     private suspend fun getRemoteKeyForLastItem(
-        state: PagingState<Int, MovieModel>,
+        state: PagingState<Int, PopularMoviesModel>,
     ): PopularMoviesRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { movie ->

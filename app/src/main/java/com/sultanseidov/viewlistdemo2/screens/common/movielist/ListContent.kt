@@ -27,7 +27,7 @@ import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberAsyncImagePainter
 import com.sultanseidov.viewlistdemo2.R
-import com.sultanseidov.viewlistdemo2.data.entity.MovieModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
 import com.sultanseidov.viewlistdemo2.screens.common.ErrorItem
 import com.sultanseidov.viewlistdemo2.screens.common.LoadingItem
 import com.sultanseidov.viewlistdemo2.screens.common.LoadingView
@@ -37,7 +37,7 @@ import com.sultanseidov.viewlistdemo2.util.Constants.IMAGE_BASE_URL
 
 @ExperimentalCoilApi
 @Composable
-fun MovieList(lazyMovieItems: LazyPagingItems<MovieModel>) {
+fun MovieList(lazyMovieItems: LazyPagingItems<PopularMoviesModel>) {
 
     LazyColumn(
         modifier = Modifier.fillMaxHeight().fillMaxWidth(),
@@ -90,7 +90,7 @@ fun MovieList(lazyMovieItems: LazyPagingItems<MovieModel>) {
 
 @ExperimentalCoilApi
 @Composable
-fun MovieItem(movieItem: MovieModel) {
+fun MovieItem(movieItem: PopularMoviesModel) {
     val context = LocalContext.current
 
     val painter = rememberAsyncImagePainter(

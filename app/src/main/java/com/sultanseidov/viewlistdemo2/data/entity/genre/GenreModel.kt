@@ -1,10 +1,9 @@
-package com.sultanseidov.viewlistdemo2.data.entity
+package com.sultanseidov.viewlistdemo2.data.entity.genre
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.sultanseidov.viewlistdemo2.util.Constants
-import org.jetbrains.annotations.NotNull
 
 @Entity(tableName = Constants.GENRES_TABLE)
 data class GenreModel(

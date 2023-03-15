@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sultanseidov.viewlistdemo2.data.entity.GenreModel
+import com.sultanseidov.viewlistdemo2.data.entity.genre.GenreModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao

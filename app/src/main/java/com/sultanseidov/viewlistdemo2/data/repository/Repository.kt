@@ -5,10 +5,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.sultanseidov.viewlistdemo2.BuildConfig.API_KEY
-import com.sultanseidov.viewlistdemo2.data.entity.GenreModel
-import com.sultanseidov.viewlistdemo2.data.entity.MovieModel
-import com.sultanseidov.viewlistdemo2.data.entity.ResponseGenresListModel
+import com.sultanseidov.viewlistdemo2.data.entity.genre.GenreModel
+import com.sultanseidov.viewlistdemo2.data.entity.genre.ResponseGenresListModel
 import com.sultanseidov.viewlistdemo2.data.entity.base.ResourceState
+import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
 import com.sultanseidov.viewlistdemo2.data.paging.PopularMoviesRemoteMediator
 import com.sultanseidov.viewlistdemo2.data.remote.ITmdbApi
@@ -31,7 +31,7 @@ class Repository @Inject constructor(
         appDatabase.genresDao().addGenres(genres)
     }
 
-    fun getPopularMovies(with_genres:String): Flow<PagingData<MovieModel>> {
+    fun getPopularMovies(with_genres:String): Flow<PagingData<PopularMoviesModel>> {
         val pagingSourceFactory = { appDatabase.popularMoviesDao().getAllPopularMovies() }
         return Pager(
             config = PagingConfig(pageSize = ITEMS_PER_PAGE),
@@ -40,7 +40,7 @@ class Repository @Inject constructor(
         ).flow
     }
 
-    fun getPopularMovies2(with_genres:String): Flow<PagingData<MovieModel>> {
+    fun getPopularMovies2(with_genres:String): Flow<PagingData<PopularMoviesModel>> {
         val pagingSourceFactory = { appDatabase.popularMoviesDao().getAllPopularMovies() }
         return Pager(
             config = PagingConfig(pageSize = ITEMS_PER_PAGE),
@@ -49,7 +49,7 @@ class Repository @Inject constructor(
         ).flow
     }
 
-    fun getPopularMovies3(with_genres:String): Flow<PagingData<MovieModel>> {
+    fun getPopularMovies3(with_genres:String): Flow<PagingData<PopularMoviesModel>> {
         val pagingSourceFactory = { appDatabase.popularMoviesDao().getAllPopularMovies() }
         return Pager(
             config = PagingConfig(pageSize = ITEMS_PER_PAGE),

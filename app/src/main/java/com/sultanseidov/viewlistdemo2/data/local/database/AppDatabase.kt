@@ -2,23 +2,29 @@ package com.sultanseidov.viewlistdemo2.data.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.sultanseidov.viewlistdemo2.data.entity.GenreModel
-import com.sultanseidov.viewlistdemo2.data.entity.MovieModel
-import com.sultanseidov.viewlistdemo2.data.entity.PopularMoviesRemoteKeys
-import com.sultanseidov.viewlistdemo2.data.local.dao.GenresDao
-import com.sultanseidov.viewlistdemo2.data.local.dao.PopularMoviesDao
-import com.sultanseidov.viewlistdemo2.data.local.dao.PopularMoviesRemoteKeysDao
+import androidx.room.TypeConverters
+import com.sultanseidov.viewlistdemo2.data.entity.genre.GenreModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.entity.movie.TheTypeConverters
+import com.sultanseidov.viewlistdemo2.data.entity.myviewlist.MyViewListModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
+import com.sultanseidov.viewlistdemo2.data.entity.viewlistpin.ViewListPinModel
+import com.sultanseidov.viewlistdemo2.data.local.dao.*
 
+@TypeConverters(TheTypeConverters::class)
 
 @Database(
-    entities = [MovieModel::class, PopularMoviesRemoteKeys::class, GenreModel::class],
-    version = 6,
+    entities = [PopularMoviesModel::class, PopularMoviesRemoteKeys::class, GenreModel::class,
+                MyViewListModel::class, ViewListPinModel::class],
+    version = 13,
     exportSchema = false
 )
 abstract class AppDatabase() : RoomDatabase() {
     abstract fun popularMoviesDao(): PopularMoviesDao
     abstract fun popularMoviesRemoteKeysDao(): PopularMoviesRemoteKeysDao
     abstract fun genresDao(): GenresDao
+    abstract fun myViewListDao(): MyListViewDao
+    abstract fun viewListPinsDao(): ViewListPinsDao
 
 
 }

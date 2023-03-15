@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sultanseidov.viewlistdemo2.data.entity.MovieModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
 import com.sultanseidov.viewlistdemo2.data.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -25,11 +25,11 @@ class ViewListViewModel @Inject constructor(
         fetchPopularMovies3("10402")
     }
 
-    private val _popularMoviesState = MutableStateFlow<PagingData<MovieModel>>(PagingData.empty())
+    private val _popularMoviesState = MutableStateFlow<PagingData<PopularMoviesModel>>(PagingData.empty())
     val popularMoviesState = _popularMoviesState
-    private val _popularMoviesState2 = MutableStateFlow<PagingData<MovieModel>>(PagingData.empty())
+    private val _popularMoviesState2 = MutableStateFlow<PagingData<PopularMoviesModel>>(PagingData.empty())
     val popularMoviesState2 = _popularMoviesState2
-    private val _popularMoviesState3 = MutableStateFlow<PagingData<MovieModel>>(PagingData.empty())
+    private val _popularMoviesState3 = MutableStateFlow<PagingData<PopularMoviesModel>>(PagingData.empty())
     val popularMoviesState3 = _popularMoviesState3
 
     private fun fetchPopularMovies1(genre: String) {

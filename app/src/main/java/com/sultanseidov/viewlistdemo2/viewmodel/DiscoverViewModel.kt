@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sultanseidov.viewlistdemo2.data.entity.MovieModel
-import com.sultanseidov.viewlistdemo2.data.entity.ResponseGenresListModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
+import com.sultanseidov.viewlistdemo2.data.entity.genre.ResponseGenresListModel
 import com.sultanseidov.viewlistdemo2.data.entity.base.ResourceState
 import com.sultanseidov.viewlistdemo2.data.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,6 +33,7 @@ class DiscoverViewModel @Inject constructor(
                     is ResourceState.Success -> {
 
                         _genresState.value = response.data!!
+                        repository.addGenresList(response.data.genres)
 
                     }
                     is ResourceState.Error -> {
@@ -44,7 +45,7 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
-    private val _popularMoviesState = MutableStateFlow<PagingData<MovieModel>>(PagingData.empty())
+    private val _popularMoviesState = MutableStateFlow<PagingData<PopularMoviesModel>>(PagingData.empty())
     val popularMoviesState = _popularMoviesState
 
     fun fetchPopularMovies(genre:String) {

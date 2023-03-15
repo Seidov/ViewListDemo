@@ -16,7 +16,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
-import com.sultanseidov.viewlistdemo2.data.entity.MovieModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
 import com.sultanseidov.viewlistdemo2.screens.common.movielist.MovieList
 import com.sultanseidov.viewlistdemo2.viewmodel.ViewListViewModel
 import kotlinx.coroutines.launch
@@ -98,21 +98,21 @@ fun StaticPagerScreen(
 
 @Composable
 private fun SummaryContent(
-    lazyMovieItems: LazyPagingItems<MovieModel>
+    lazyMovieItems: LazyPagingItems<PopularMoviesModel>
 ) {
     MovieList(lazyMovieItems = lazyMovieItems)
 }
 
 @Composable
 private fun InformationContent(
-    lazyMovieItems: LazyPagingItems<MovieModel>
+    lazyMovieItems: LazyPagingItems<PopularMoviesModel>
 ) {
     MovieList(lazyMovieItems = lazyMovieItems)
 }
 
 @Composable
 private fun DetailsContent(
-    lazyMovieItems: LazyPagingItems<MovieModel>
+    lazyMovieItems: LazyPagingItems<PopularMoviesModel>
 ) {
     MovieList(lazyMovieItems = lazyMovieItems)
 }

@@ -1,4 +1,4 @@
-package com.sultanseidov.viewlistdemo2.data.entity
+package com.sultanseidov.viewlistdemo2.data.entity.genre
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
