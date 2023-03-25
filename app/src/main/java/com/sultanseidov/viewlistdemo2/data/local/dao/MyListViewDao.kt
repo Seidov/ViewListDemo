@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
 import com.sultanseidov.viewlistdemo2.data.entity.myviewlist.MyViewListModel
 import kotlinx.coroutines.flow.Flow
 
@@ -16,7 +16,7 @@ interface MyListViewDao {
     suspend fun addMyListView(myViewList: MyViewListModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addAllMyPopularListView(myViewList: List<PopularMoviesModel>)
+    suspend fun addAllMyPopularListView(myViewList: List<MovieModel>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAllMyListView(myViewList: List<MyViewListModel>)

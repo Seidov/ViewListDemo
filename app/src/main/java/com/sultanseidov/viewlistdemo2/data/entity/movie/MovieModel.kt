@@ -3,11 +3,11 @@ package com.sultanseidov.viewlistdemo2.data.entity.movie
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.sultanseidov.viewlistdemo2.util.Constants.POPULAR_MOVIES_TABLE
+import com.sultanseidov.viewlistdemo2.util.Constants.MOVIES_TABLE
 
 
-@Entity(tableName = POPULAR_MOVIES_TABLE)
-data class PopularMoviesModel(
+@Entity(tableName = MOVIES_TABLE)
+data class MovieModel(
     @PrimaryKey(autoGenerate = true)
     override var pk: Long = 0,
     @SerializedName("id")

@@ -1,11 +1,11 @@
-package com.sultanseidov.viewlistdemo2.data.entity.movie
+package com.sultanseidov.viewlistdemo2.data.entity.tvshow
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-data class ResponsePopularMoviesModel(
+data class ResponseDiscoverTvShowsModel(
     @SerializedName("page")
     val page: Int = 1,
     @SerializedName("results")
-    val movies: List<PopularMoviesModel>,
-) : Serializable
+    val tvShowModels: List<TvShowModel>
+): Serializable

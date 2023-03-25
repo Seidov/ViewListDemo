@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import com.sultanseidov.viewlistdemo2.data.entity.genre.GenreModel
-import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
 import com.sultanseidov.viewlistdemo2.data.entity.genre.ResponseGenresListModel
 import com.sultanseidov.viewlistdemo2.data.entity.base.ResourceState
 import com.sultanseidov.viewlistdemo2.data.repository.Repository
@@ -23,7 +23,7 @@ class TestViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    val getPopularMovies = repository.getPopularMovies("")
+    val getPopularMovies = repository.getDiscoverMovies("")
 
     val getAllGenres = repository.getAllGenres
 
@@ -31,8 +31,8 @@ class TestViewModel @Inject constructor(
         mutableStateOf<ResourceState<ResponseGenresListModel>>(ResourceState.Success(null))
     val genresState: State<ResourceState<ResponseGenresListModel>> = _genresState
 
-    private var _popularMoviesByGenre =  repository.getPopularMovies("")
-    var popularMoviesByGenre: Flow<PagingData<PopularMoviesModel>> =
+    private var _popularMoviesByGenre =  repository.getDiscoverMovies("")
+    var popularMoviesByGenre: Flow<PagingData<MovieModel>> =
         _popularMoviesByGenre
 
     fun fetchGenres() {
@@ -45,12 +45,12 @@ class TestViewModel @Inject constructor(
 
     fun getPopularMoviesByGenre(id: String) {
         viewModelScope.launch {
-            popularMoviesByGenre = repository.getPopularMovies(id)
+            popularMoviesByGenre = repository.getDiscoverMovies(id)
         }
     }
 
-    fun getPopularMoviesByGenre2(id: String): Flow<PagingData<PopularMoviesModel>> {
-        return repository.getPopularMovies(id)
+    fun getPopularMoviesByGenre2(id: String): Flow<PagingData<MovieModel>> {
+        return repository.getDiscoverMovies(id)
     }
 
     fun addGenres(genres: List<GenreModel>) {

@@ -8,9 +8,11 @@ import com.sultanseidov.viewlistdemo2.BuildConfig.API_KEY
 import com.sultanseidov.viewlistdemo2.data.entity.genre.GenreModel
 import com.sultanseidov.viewlistdemo2.data.entity.genre.ResponseGenresListModel
 import com.sultanseidov.viewlistdemo2.data.entity.base.ResourceState
-import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
+import com.sultanseidov.viewlistdemo2.data.entity.tvshow.TvShowModel
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
-import com.sultanseidov.viewlistdemo2.data.paging.PopularMoviesRemoteMediator
+import com.sultanseidov.viewlistdemo2.data.paging.DiscoverMoviesRemoteMediator
+import com.sultanseidov.viewlistdemo2.data.paging.DiscoverTvShowsRemoteMediator
 import com.sultanseidov.viewlistdemo2.data.remote.ITmdbApi
 import com.sultanseidov.viewlistdemo2.util.Constants.ITEMS_PER_PAGE
 import kotlinx.coroutines.Dispatchers
@@ -30,34 +32,6 @@ class Repository @Inject constructor(
     suspend fun addGenresList(genres: List<GenreModel>){
         appDatabase.genresDao().addGenres(genres)
     }
-
-    fun getPopularMovies(with_genres:String): Flow<PagingData<PopularMoviesModel>> {
-        val pagingSourceFactory = { appDatabase.popularMoviesDao().getAllPopularMovies() }
-        return Pager(
-            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
-            remoteMediator = PopularMoviesRemoteMediator(iTmdbApi, appDatabase,with_genres),
-            pagingSourceFactory = pagingSourceFactory
-        ).flow
-    }
-
-    fun getPopularMovies2(with_genres:String): Flow<PagingData<PopularMoviesModel>> {
-        val pagingSourceFactory = { appDatabase.popularMoviesDao().getAllPopularMovies() }
-        return Pager(
-            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
-            remoteMediator = PopularMoviesRemoteMediator(iTmdbApi, appDatabase,with_genres),
-            pagingSourceFactory = pagingSourceFactory
-        ).flow
-    }
-
-    fun getPopularMovies3(with_genres:String): Flow<PagingData<PopularMoviesModel>> {
-        val pagingSourceFactory = { appDatabase.popularMoviesDao().getAllPopularMovies() }
-        return Pager(
-            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
-            remoteMediator = PopularMoviesRemoteMediator(iTmdbApi, appDatabase,with_genres),
-            pagingSourceFactory = pagingSourceFactory
-        ).flow
-    }
-
     fun getMovieGenres(): Flow<ResourceState<ResponseGenresListModel>> = flow{
         try {
             emit(ResourceState.Loading)
@@ -69,5 +43,22 @@ class Repository @Inject constructor(
             emit(ResourceState.Error(e))
         }
     }.flowOn(Dispatchers.IO)
+    fun getDiscoverMovies(with_genres:String): Flow<PagingData<MovieModel>> {
+        val pagingSourceFactory = { appDatabase.discoverMoviesDao().getAllDiscoverMovies() }
+        return Pager(
+            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
+            remoteMediator = DiscoverMoviesRemoteMediator(iTmdbApi, appDatabase,with_genres),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
+    }
+    fun getDiscoverTvShows(with_genres:String): Flow<PagingData<TvShowModel>> {
+        val pagingSourceFactory = { appDatabase.discoverTvShowsDao().getAllDiscoverTvShows() }
+        return Pager(
+            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
+            remoteMediator = DiscoverTvShowsRemoteMediator(iTmdbApi, appDatabase,with_genres),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
+    }
+
 
 }

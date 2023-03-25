@@ -10,11 +10,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.collectAsLazyPagingItems
+import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.*
 import com.google.accompanist.pager.rememberPagerState
 import com.sultanseidov.viewlistdemo2.data.entity.genre.GenreModel
 import com.sultanseidov.viewlistdemo2.screens.common.movielist.MovieList
+import com.sultanseidov.viewlistdemo2.screens.common.movielist.TvShowsList
 import com.sultanseidov.viewlistdemo2.viewmodel.DiscoverViewModel
 import kotlinx.coroutines.launch
 
@@ -60,7 +62,7 @@ fun Tabs(pagerState: PagerState, tabTitles: List<String>) {
     }
 }
 
-@OptIn(ExperimentalPagingApi::class)
+@OptIn(ExperimentalPagingApi::class, ExperimentalCoilApi::class)
 @ExperimentalPagerApi
 @Composable
 fun TabsContent(
@@ -70,12 +72,15 @@ fun TabsContent(
 
 ) {
     fun launch() {
-        discoverViewModel.fetchPopularMovies(genreGroups[pagerState.currentPage].id.toString())
+        //discoverViewModel.fetchDiscoverMovies(genreGroups[pagerState.currentPage].id.toString())
+        discoverViewModel.fetchDiscoverTvShows(genreGroups[pagerState.currentPage].id.toString())
+
     }
 
     launch()
 
-    val movies = discoverViewModel.popularMoviesState.collectAsLazyPagingItems()
+    //val movies = discoverViewModel.discoverMoviesState.collectAsLazyPagingItems()
+    val tvShows = discoverViewModel.discoverTvShowsState.collectAsLazyPagingItems()
 
     HorizontalPager(count = genreGroups.size, state = pagerState) { page ->
         Log.d(ContentValues.TAG, "TabsContent: $page")
@@ -84,7 +89,8 @@ fun TabsContent(
                 .fillMaxSize()
         ) {
 
-            MovieList(lazyMovieItems = movies)
+            //MovieList(lazyMovieItems = movies)
+            TvShowsList(lazyMovieItems = tvShows)
 
         }
 

@@ -8,24 +8,24 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.sultanseidov.viewlistdemo2.BuildConfig.API_KEY
-import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
-import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesRemoteKeys
-import com.sultanseidov.viewlistdemo2.data.entity.myviewlist.MyViewListModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.MoviesRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.entity.tvshow.TvShowModel
+import com.sultanseidov.viewlistdemo2.data.entity.tvshow.TvShowsRemoteKeys
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
 import com.sultanseidov.viewlistdemo2.data.remote.ITmdbApi
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class PopularMoviesRemoteMediator @Inject constructor(
+class DiscoverTvShowsRemoteMediator @Inject constructor(
     private val iTmdbApi: ITmdbApi,
     private val appDatabase: AppDatabase,
     private val with_genres: String
-) : RemoteMediator<Int, PopularMoviesModel>() {
+) : RemoteMediator<Int, TvShowModel>() {
 
 
     private val myViewListDao = appDatabase.myViewListDao()
-    private val popularMoviesDao = appDatabase.popularMoviesDao()
-    private val popularMoviesRemoteKeysDao = appDatabase.popularMoviesRemoteKeysDao()
+    private val discoverTvShowsDao = appDatabase.discoverTvShowsDao()
+    private val discoverTvShowsRemoteKeysDao = appDatabase.discoverTvShowsRemoteKeysDao()
 
     override suspend fun initialize(): InitializeAction {
         // Require that remote REFRESH is launched on initial load and succeeds before launching
@@ -35,7 +35,7 @@ class PopularMoviesRemoteMediator @Inject constructor(
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, PopularMoviesModel>
+        state: PagingState<Int, TvShowModel>
     ): MediatorResult {
         return try {
             val currentPage = when (loadType) {
@@ -61,7 +61,7 @@ class PopularMoviesRemoteMediator @Inject constructor(
                 }
             }
 
-            val response = iTmdbApi.getPopularMovies(
+            val response = iTmdbApi.getDiscoverTvShows(
                 api_key = API_KEY,
                 page = currentPage,
                 with_genres = with_genres
@@ -74,8 +74,8 @@ class PopularMoviesRemoteMediator @Inject constructor(
                 responseData?.let {
                     appDatabase.withTransaction {
                         if (loadType == LoadType.REFRESH) {
-                            popularMoviesDao.deleteAllPopularMovies()
-                            popularMoviesRemoteKeysDao.deleteAllRemoteKeys()
+                            discoverTvShowsDao.deleteAllDiscoverTvShows()
+                            discoverTvShowsRemoteKeysDao.deleteAllRemoteKeys()
                         }
                         var prevPage: Int?
                         var nextPage: Int
@@ -85,25 +85,17 @@ class PopularMoviesRemoteMediator @Inject constructor(
                             prevPage = if (pageNumber <= 1) null else pageNumber - 1
                         }
 
-                        val keys = responseData.movies?.map { movie ->
-                            PopularMoviesRemoteKeys(
-                                id = movie.movieId,
+                        val keys = responseData.tvShowModels?.map { tvShowModel ->
+                            TvShowsRemoteKeys(
+                                id = tvShowModel.tvShowId,
                                 prevPage = prevPage,
                                 nextPage = nextPage,
                                 lastUpdated = System.currentTimeMillis()
                             )
                         }
 
-                        popularMoviesRemoteKeysDao.addAllRemoteKeys(remoteKeys = keys!!)
-
-                        Log.e("FUCK", "popularMoviesRemoteKeysDao has got and declared!!" )
-
-                        popularMoviesDao.addPopularMovies(popularMovies = responseData.movies)
-
-                        Log.e("FUCK", "popularMoviesDao has got and declared!!" )
-
-                        //myViewListDao.addAllMyListView(myViewList = responseData.movies)
-                        Log.e("FUCK", "myViewListDao has got and declared! : " + myViewListDao.getAllMyListView() )
+                        discoverTvShowsDao.addDiscoverTvShows(discoverTvShows = responseData.tvShowModels)
+                        discoverTvShowsRemoteKeysDao.addAllRemoteKeys(remoteKeys = keys!!)
                     }
                 }
 
@@ -111,37 +103,37 @@ class PopularMoviesRemoteMediator @Inject constructor(
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
 
         } catch (e: Exception) {
+            Log.e("DiscoverTvShowsRemoteMediator", e.message.toString())
             return MediatorResult.Error(e)
-        }
 
-        Log.e("FUCK", "load method finished has got and declared!!" )
+        }
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, PopularMoviesModel>,
-    ): PopularMoviesRemoteKeys? {
+        state: PagingState<Int, TvShowModel>,
+    ): TvShowsRemoteKeys? {
         return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.movieId?.let { id ->
-                popularMoviesRemoteKeysDao.getRemoteKeys(id = id)
+            state.closestItemToPosition(position)?.tvShowId?.let { id ->
+                discoverTvShowsRemoteKeysDao.getRemoteKeys(id = id)
             }
         }
     }
 
     private suspend fun getRemoteKeyForFirstItem(
-        state: PagingState<Int, PopularMoviesModel>,
-    ): PopularMoviesRemoteKeys? {
+        state: PagingState<Int, TvShowModel>,
+    ): TvShowsRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
-            ?.let { movie ->
-                popularMoviesRemoteKeysDao.getRemoteKeys(id = movie.movieId)
+            ?.let { tvShowsModel ->
+                discoverTvShowsRemoteKeysDao.getRemoteKeys(id = tvShowsModel.tvShowId)
             }
     }
 
     private suspend fun getRemoteKeyForLastItem(
-        state: PagingState<Int, PopularMoviesModel>,
-    ): PopularMoviesRemoteKeys? {
+        state: PagingState<Int, TvShowModel>,
+    ): TvShowsRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let { movie ->
-                popularMoviesRemoteKeysDao.getRemoteKeys(id = movie.movieId)
+            ?.let { tvShowsModel ->
+                discoverTvShowsRemoteKeysDao.getRemoteKeys(id = tvShowsModel.tvShowId)
             }
     }
 

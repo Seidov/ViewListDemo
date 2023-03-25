@@ -1,5 +1,6 @@
 package com.sultanseidov.viewlistdemo2.screens.common.movielist
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,11 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
-import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberAsyncImagePainter
 import com.sultanseidov.viewlistdemo2.R
-import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
+import com.sultanseidov.viewlistdemo2.data.entity.tvshow.TvShowModel
 import com.sultanseidov.viewlistdemo2.screens.common.ErrorItem
 import com.sultanseidov.viewlistdemo2.screens.common.LoadingItem
 import com.sultanseidov.viewlistdemo2.screens.common.LoadingView
@@ -37,7 +38,7 @@ import com.sultanseidov.viewlistdemo2.util.Constants.IMAGE_BASE_URL
 
 @ExperimentalCoilApi
 @Composable
-fun MovieList(lazyMovieItems: LazyPagingItems<PopularMoviesModel>) {
+fun TvShowsList(lazyMovieItems: LazyPagingItems<TvShowModel>) {
 
     LazyColumn(
         modifier = Modifier.fillMaxHeight().fillMaxWidth(),
@@ -51,7 +52,7 @@ fun MovieList(lazyMovieItems: LazyPagingItems<PopularMoviesModel>) {
             }
         ) { movieItem ->
             movieItem?.let {
-                MovieItem(movieItem = it)
+                TvShowsItem(tvShowItem = it)
             }
         }
 
@@ -80,6 +81,8 @@ fun MovieList(lazyMovieItems: LazyPagingItems<PopularMoviesModel>) {
                             message = e.error.localizedMessage!!,
                             onClickRetry = { retry() }
                         )
+                        Log.e("TvShowsContent", e.error.localizedMessage!!)
+
                     }
                 }
             }
@@ -90,11 +93,11 @@ fun MovieList(lazyMovieItems: LazyPagingItems<PopularMoviesModel>) {
 
 @ExperimentalCoilApi
 @Composable
-fun MovieItem(movieItem: PopularMoviesModel) {
+fun TvShowsItem(tvShowItem: TvShowModel) {
     val context = LocalContext.current
 
     val painter = rememberAsyncImagePainter(
-        model = IMAGE_BASE_URL + movieItem.posterPath
+        model = IMAGE_BASE_URL + tvShowItem.poster_path
     )
 
     Box(
@@ -137,7 +140,7 @@ fun MovieItem(movieItem: PopularMoviesModel) {
                 text = buildAnnotatedString {
                     //append("Photo by ")
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Black)) {
-                        movieItem.title?.let { append(it) }
+                        tvShowItem.name?.let { append(it) }
                     }
                 },
                 color = Color.White,
@@ -148,36 +151,9 @@ fun MovieItem(movieItem: PopularMoviesModel) {
             LikeCounter(
                 modifier = Modifier.weight(3f),
                 painter = painterResource(id = R.drawable.ic_star),
-                likes = "${movieItem.rating}"
+                likes = "${tvShowItem.popularity.toString()}"
             )
         }
     }
 }
 
-@Composable
-fun LikeCounter(
-    modifier: Modifier,
-    painter: Painter,
-    likes: String
-) {
-    Row(
-        modifier = modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End
-    ) {
-        Icon(
-            painter = painter,
-            contentDescription = "Star Icon",
-            tint = StarRed
-        )
-        Divider(modifier = Modifier.width(6.dp))
-        Text(
-            text = likes,
-            color = Color.White,
-            fontSize = MaterialTheme.typography.subtitle1.fontSize,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
-}

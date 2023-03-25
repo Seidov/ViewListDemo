@@ -16,15 +16,16 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
-import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
+import com.sultanseidov.viewlistdemo2.data.entity.tvshow.TvShowModel
 import com.sultanseidov.viewlistdemo2.screens.common.movielist.MovieList
+import com.sultanseidov.viewlistdemo2.screens.common.movielist.TvShowsList
 import com.sultanseidov.viewlistdemo2.viewmodel.ViewListViewModel
 import kotlinx.coroutines.launch
 
 enum class StaticPagerScreenPage {
-    Summary,
-    Info,
-    Details,
+    ForYouMovies,
+    ForYouTvShows,
 }
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalPagingApi::class)
@@ -36,17 +37,15 @@ fun StaticPagerScreen(
     val pagerState = rememberPagerState()
     val pages = remember {
         listOf(
-            StaticPagerScreenPage.Summary,
-            StaticPagerScreenPage.Info,
-            StaticPagerScreenPage.Details,
+            StaticPagerScreenPage.ForYouMovies,
+            StaticPagerScreenPage.ForYouTvShows,
         )
     }
 
 
 
-    var movies1 = viewListViewModel.popularMoviesState.collectAsLazyPagingItems()
-    var movies2 = viewListViewModel.popularMoviesState2.collectAsLazyPagingItems()
-    var movies3 = viewListViewModel.popularMoviesState3.collectAsLazyPagingItems()
+    var movies = viewListViewModel.discoverMoviesState.collectAsLazyPagingItems()
+    var tvShows = viewListViewModel.discoverTvShowsState.collectAsLazyPagingItems()
 
 
 
@@ -78,18 +77,15 @@ fun StaticPagerScreen(
             ) {
                 when (page) {
 
-                    StaticPagerScreenPage.Summary -> {
+                    StaticPagerScreenPage.ForYouMovies -> {
 
-                        SummaryContent(movies1)
+                        ForYouMoviesContent(movies)
                     }
-                    StaticPagerScreenPage.Info -> {
+                    StaticPagerScreenPage.ForYouTvShows -> {
 
-                        InformationContent(movies2)
+                        ForYouTvShowsContent(tvShows)
                     }
-                    StaticPagerScreenPage.Details -> {
 
-                        DetailsContent(movies3)
-                    }
                 }
             }
         }
@@ -97,22 +93,15 @@ fun StaticPagerScreen(
 }
 
 @Composable
-private fun SummaryContent(
-    lazyMovieItems: LazyPagingItems<PopularMoviesModel>
+private fun ForYouMoviesContent(
+    lazyMovieItems: LazyPagingItems<MovieModel>
 ) {
     MovieList(lazyMovieItems = lazyMovieItems)
 }
 
 @Composable
-private fun InformationContent(
-    lazyMovieItems: LazyPagingItems<PopularMoviesModel>
+private fun ForYouTvShowsContent(
+    lazyTvShowItems: LazyPagingItems<TvShowModel>
 ) {
-    MovieList(lazyMovieItems = lazyMovieItems)
-}
-
-@Composable
-private fun DetailsContent(
-    lazyMovieItems: LazyPagingItems<PopularMoviesModel>
-) {
-    MovieList(lazyMovieItems = lazyMovieItems)
+    TvShowsList(lazyMovieItems = lazyTvShowItems)
 }

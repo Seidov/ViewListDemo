@@ -15,8 +15,10 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.sultanseidov.viewlistdemo2.data.entity.genre.GenreModel
-import com.sultanseidov.viewlistdemo2.data.entity.movie.PopularMoviesModel
+import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
+import com.sultanseidov.viewlistdemo2.data.entity.tvshow.TvShowModel
 import com.sultanseidov.viewlistdemo2.screens.common.movielist.MovieList
+import com.sultanseidov.viewlistdemo2.screens.common.movielist.TvShowsList
 import com.sultanseidov.viewlistdemo2.viewmodel.TestViewModel
 import kotlinx.coroutines.launch
 
@@ -45,7 +47,7 @@ fun DynamicPagerScreen(
     //val getPopularMovies = homeViewModel.getPopularMovies.collectAsLazyPagingItems()
     //val getAllGenres = homeViewModel.getAllGenres
 
-    var list = mutableListOf<LazyPagingItems<PopularMoviesModel>>()
+    var list = mutableListOf<LazyPagingItems<MovieModel>>()
     tabGenresList.forEach {
         list.add(testViewModel.getPopularMoviesByGenre2(it.id.toString()).collectAsLazyPagingItems())
     }
@@ -93,7 +95,7 @@ fun DynamicPagerScreen(
 @Composable
 private fun DynamicPageContent(
     page: Int,
-    lazyMovieItems: LazyPagingItems<PopularMoviesModel>
+    lazyMovieItems: LazyPagingItems<MovieModel>
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
