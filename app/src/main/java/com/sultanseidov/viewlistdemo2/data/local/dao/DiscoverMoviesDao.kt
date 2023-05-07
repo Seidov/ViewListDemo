@@ -5,13 +5,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
+import com.sultanseidov.viewlistdemo2.data.model.movie.MovieModel
 
 @Dao
 interface DiscoverMoviesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addDiscoverMovies(discoverMovies: List<MovieModel>)
+    suspend fun insertDiscoverMovies(discoverMovies: List<MovieModel>)
 
     @Query("SELECT * FROM movies_table")
     fun getAllDiscoverMovies(): PagingSource<Int, MovieModel>

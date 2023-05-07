@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
-import com.sultanseidov.viewlistdemo2.data.entity.genre.GenreModel
-import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
-import com.sultanseidov.viewlistdemo2.data.entity.genre.ResponseGenresListModel
-import com.sultanseidov.viewlistdemo2.data.entity.base.ResourceState
+import com.sultanseidov.viewlistdemo2.data.model.genre.GenresMovieModel
+import com.sultanseidov.viewlistdemo2.data.model.movie.MovieModel
+import com.sultanseidov.viewlistdemo2.data.model.genre.ResponseGenresListModel
+import com.sultanseidov.viewlistdemo2.data.model.base.ResourceState
 import com.sultanseidov.viewlistdemo2.data.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -37,7 +37,7 @@ class TestViewModel @Inject constructor(
 
     fun fetchGenres() {
         viewModelScope.launch {
-            repository.getMovieGenres().collect { response ->
+            repository.fetchMoviesGenre().collect { response ->
                 _genresState.value = response
             }
         }
@@ -53,9 +53,9 @@ class TestViewModel @Inject constructor(
         return repository.getDiscoverMovies(id)
     }
 
-    fun addGenres(genres: List<GenreModel>) {
+    fun addGenres(genres: List<GenresMovieModel>) {
         viewModelScope.launch {
-            repository.addGenresList(genres)
+            repository.insertGenresList(genres)
         }
     }
 

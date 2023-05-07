@@ -8,9 +8,8 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.sultanseidov.viewlistdemo2.BuildConfig.API_KEY
-import com.sultanseidov.viewlistdemo2.data.entity.movie.MoviesRemoteKeys
-import com.sultanseidov.viewlistdemo2.data.entity.tvshow.TvShowModel
-import com.sultanseidov.viewlistdemo2.data.entity.tvshow.TvShowsRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowModel
+import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowsRemoteKeys
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
 import com.sultanseidov.viewlistdemo2.data.remote.ITmdbApi
 import javax.inject.Inject
@@ -23,7 +22,7 @@ class DiscoverTvShowsRemoteMediator @Inject constructor(
 ) : RemoteMediator<Int, TvShowModel>() {
 
 
-    private val myViewListDao = appDatabase.myViewListDao()
+    private val myViewListDao = appDatabase.viewListTvShowsDao()
     private val discoverTvShowsDao = appDatabase.discoverTvShowsDao()
     private val discoverTvShowsRemoteKeysDao = appDatabase.discoverTvShowsRemoteKeysDao()
 
@@ -94,8 +93,8 @@ class DiscoverTvShowsRemoteMediator @Inject constructor(
                             )
                         }
 
-                        discoverTvShowsDao.addDiscoverTvShows(discoverTvShows = responseData.tvShowModels)
-                        discoverTvShowsRemoteKeysDao.addAllRemoteKeys(remoteKeys = keys!!)
+                        discoverTvShowsDao.insertDiscoverTvShows(discoverTvShows = responseData.tvShowModels)
+                        discoverTvShowsRemoteKeysDao.insertAllRemoteKeys(remoteKeys = keys!!)
                     }
                 }
 

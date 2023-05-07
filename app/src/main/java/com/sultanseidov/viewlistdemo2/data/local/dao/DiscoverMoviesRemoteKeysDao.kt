@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sultanseidov.viewlistdemo2.data.entity.movie.MoviesRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.model.movie.MoviesRemoteKeys
 
 @Dao
 interface DiscoverMoviesRemoteKeysDao {
@@ -13,7 +13,7 @@ interface DiscoverMoviesRemoteKeysDao {
     suspend fun getRemoteKeys(id: Int): MoviesRemoteKeys
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addAllRemoteKeys(remoteKeys: List<MoviesRemoteKeys>)
+    suspend fun insertAllRemoteKeys(remoteKeys: List<MoviesRemoteKeys>)
 
     @Query("DELETE FROM movies_remote_keys_table")
     suspend fun deleteAllRemoteKeys()

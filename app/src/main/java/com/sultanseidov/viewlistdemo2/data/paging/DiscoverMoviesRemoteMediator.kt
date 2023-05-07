@@ -1,14 +1,13 @@
 package com.sultanseidov.viewlistdemo2.data.paging
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.sultanseidov.viewlistdemo2.BuildConfig.API_KEY
-import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
-import com.sultanseidov.viewlistdemo2.data.entity.movie.MoviesRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.model.movie.MovieModel
+import com.sultanseidov.viewlistdemo2.data.model.movie.MoviesRemoteKeys
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
 import com.sultanseidov.viewlistdemo2.data.remote.ITmdbApi
 import javax.inject.Inject
@@ -21,7 +20,7 @@ class DiscoverMoviesRemoteMediator @Inject constructor(
 ) : RemoteMediator<Int, MovieModel>() {
 
 
-    private val myViewListDao = appDatabase.myViewListDao()
+    private val myViewListDao = appDatabase.viewListMoviesDao()
     private val popularMoviesDao = appDatabase.discoverMoviesDao()
     private val popularMoviesRemoteKeysDao = appDatabase.discoverMoviesRemoteKeysDao()
 
@@ -92,8 +91,8 @@ class DiscoverMoviesRemoteMediator @Inject constructor(
                             )
                         }
 
-                        popularMoviesDao.addDiscoverMovies(discoverMovies = responseData.movieModels)
-                        popularMoviesRemoteKeysDao.addAllRemoteKeys(remoteKeys = keys!!)
+                        popularMoviesDao.insertDiscoverMovies(discoverMovies = responseData.movieModels)
+                        popularMoviesRemoteKeysDao.insertAllRemoteKeys(remoteKeys = keys!!)
                     }
                 }
 

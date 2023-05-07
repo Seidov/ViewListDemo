@@ -7,11 +7,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
-import com.sultanseidov.viewlistdemo2.data.entity.genre.ResponseGenresListModel
-import com.sultanseidov.viewlistdemo2.data.entity.base.ResourceState
-import com.sultanseidov.viewlistdemo2.data.entity.tvshow.TvShowModel
-import com.sultanseidov.viewlistdemo2.data.entity.viewlistpin.PinsViewListModel
+import com.sultanseidov.viewlistdemo2.data.model.movie.MovieModel
+import com.sultanseidov.viewlistdemo2.data.model.genre.ResponseGenresListModel
+import com.sultanseidov.viewlistdemo2.data.model.base.ResourceState
+import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowModel
+import com.sultanseidov.viewlistdemo2.data.model.viewlistpin.PinsViewListModel
 import com.sultanseidov.viewlistdemo2.data.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,13 +39,13 @@ class DiscoverViewModel @Inject constructor(
 
     fun fetchGenres() {
         viewModelScope.launch {
-            repository.getMovieGenres().collect { response ->
+            repository.fetchMoviesGenre().collect { response ->
 
                 when(response) {
                     is ResourceState.Success -> {
 
                         _genresState.value = response.data!!
-                        repository.addGenresList(response.data.genres)
+                        repository.insertGenresList(response.data.genres)
 
                     }
                     is ResourceState.Error -> {

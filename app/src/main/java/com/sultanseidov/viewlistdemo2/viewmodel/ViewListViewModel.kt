@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
-import com.sultanseidov.viewlistdemo2.data.entity.tvshow.TvShowModel
+import com.sultanseidov.viewlistdemo2.data.model.movie.MovieModel
+import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowModel
 import com.sultanseidov.viewlistdemo2.data.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

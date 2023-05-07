@@ -5,14 +5,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sultanseidov.viewlistdemo2.data.entity.movie.MovieModel
-import com.sultanseidov.viewlistdemo2.data.entity.tvshow.TvShowModel
+import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowModel
 
 @Dao
 interface DiscoverTvShowsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addDiscoverTvShows(discoverTvShows: List<TvShowModel>)
+    suspend fun insertDiscoverTvShows(discoverTvShows: List<TvShowModel>)
 
     @Query("SELECT * FROM tv_show_table")
     fun getAllDiscoverTvShows(): PagingSource<Int, TvShowModel>

@@ -7,7 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.paging.ExperimentalPagingApi
-import com.sultanseidov.viewlistdemo2.screens.common.tab.StaticPagerScreen
+import com.sultanseidov.viewlistdemo2.ui.common.tab.StaticPagerScreen
 
 @OptIn(ExperimentalPagingApi::class)
 @Composable

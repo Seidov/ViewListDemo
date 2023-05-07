@@ -1,8 +1,8 @@
 package com.sultanseidov.viewlistdemo2.data.remote
 
-import com.sultanseidov.viewlistdemo2.data.entity.genre.ResponseGenresListModel
-import com.sultanseidov.viewlistdemo2.data.entity.movie.ResponseDiscoverMoviesModel
-import com.sultanseidov.viewlistdemo2.data.entity.tvshow.ResponseDiscoverTvShowsModel
+import com.sultanseidov.viewlistdemo2.data.model.genre.ResponseGenresListModel
+import com.sultanseidov.viewlistdemo2.data.model.movie.ResponseDiscoverMoviesModel
+import com.sultanseidov.viewlistdemo2.data.model.tvshow.ResponseDiscoverTvShowsModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

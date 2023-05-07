@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.paging.ExperimentalPagingApi
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.sultanseidov.viewlistdemo2.screens.common.tab.TabScreen
+import com.sultanseidov.viewlistdemo2.ui.common.tab.TabScreen
 import com.sultanseidov.viewlistdemo2.viewmodel.DiscoverViewModel
 
 @OptIn(ExperimentalPagerApi::class)
