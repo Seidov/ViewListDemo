@@ -19,10 +19,9 @@ class DiscoverMoviesRemoteMediator @Inject constructor(
     private val with_genres: String
 ) : RemoteMediator<Int, MovieModel>() {
 
-
-    private val myViewListDao = appDatabase.viewListMoviesDao()
     private val popularMoviesDao = appDatabase.discoverMoviesDao()
     private val popularMoviesRemoteKeysDao = appDatabase.discoverMoviesRemoteKeysDao()
+    //private val myViewListDao = appDatabase.viewListMoviesDao()
 
     override suspend fun initialize(): InitializeAction {
         // Require that remote REFRESH is launched on initial load and succeeds before launching
@@ -82,7 +81,7 @@ class DiscoverMoviesRemoteMediator @Inject constructor(
                             prevPage = if (pageNumber <= 1) null else pageNumber - 1
                         }
 
-                        val keys = responseData.movieModels?.map { movie ->
+                        val keys = responseData.movieModels.map { movie ->
                             MoviesRemoteKeys(
                                 id = movie.movieId,
                                 prevPage = prevPage,
@@ -92,7 +91,8 @@ class DiscoverMoviesRemoteMediator @Inject constructor(
                         }
 
                         popularMoviesDao.insertDiscoverMovies(discoverMovies = responseData.movieModels)
-                        popularMoviesRemoteKeysDao.insertAllRemoteKeys(remoteKeys = keys!!)
+                        popularMoviesRemoteKeysDao.insertAllRemoteKeys(remoteKeys = keys)
+                        //myViewListDao.insertMovie( responseData.movieModels[0])
                     }
                 }
 

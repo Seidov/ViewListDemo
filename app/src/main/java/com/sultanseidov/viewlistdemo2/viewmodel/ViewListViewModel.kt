@@ -7,7 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.sultanseidov.viewlistdemo2.data.model.movie.MovieModel
 import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowModel
-import com.sultanseidov.viewlistdemo2.data.repository.Repository
+import com.sultanseidov.viewlistdemo2.data.repository.RepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @ExperimentalPagingApi
 @HiltViewModel
 class ViewListViewModel @Inject constructor(
-    private val repository: Repository
+    private val repositoryImpl: RepositoryImpl
 ) : ViewModel() {
 
     init {
@@ -32,7 +32,7 @@ class ViewListViewModel @Inject constructor(
 
     private fun fetchDiscoverMovies(genre: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getDiscoverMovies(genre).cachedIn(viewModelScope).collect {
+            repositoryImpl.getAllDiscoverMovies(genre).cachedIn(viewModelScope).collect {
                 _discoverMoviesState.value = it
             }
         }
@@ -40,7 +40,7 @@ class ViewListViewModel @Inject constructor(
 
     private fun fetchDiscoverTvShows(genre: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getDiscoverTvShows(genre).cachedIn(viewModelScope).collect {
+            repositoryImpl.getAllDiscoverTvShows(genre).cachedIn(viewModelScope).collect {
                 _discoverTvShowsState.value = it
             }
         }

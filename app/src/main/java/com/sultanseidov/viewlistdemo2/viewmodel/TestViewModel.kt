@@ -8,9 +8,9 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import com.sultanseidov.viewlistdemo2.data.model.genre.GenresMovieModel
 import com.sultanseidov.viewlistdemo2.data.model.movie.MovieModel
-import com.sultanseidov.viewlistdemo2.data.model.genre.ResponseGenresListModel
+import com.sultanseidov.viewlistdemo2.data.model.genre.ResponseMovieGenresListModel
 import com.sultanseidov.viewlistdemo2.data.model.base.ResourceState
-import com.sultanseidov.viewlistdemo2.data.repository.Repository
+import com.sultanseidov.viewlistdemo2.data.repository.RepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -20,24 +20,23 @@ import javax.inject.Inject
 @ExperimentalPagingApi
 @HiltViewModel
 class TestViewModel @Inject constructor(
-    private val repository: Repository
+    private val repositoryImpl: RepositoryImpl
 ) : ViewModel() {
 
-    val getPopularMovies = repository.getDiscoverMovies("")
+    val getPopularMovies = repositoryImpl.getAllDiscoverMovies("")
 
-    val getAllGenres = repository.getAllGenres
 
     private val _genresState =
-        mutableStateOf<ResourceState<ResponseGenresListModel>>(ResourceState.Success(null))
-    val genresState: State<ResourceState<ResponseGenresListModel>> = _genresState
+        mutableStateOf<ResourceState<ResponseMovieGenresListModel>>(ResourceState.Success(null))
+    val genresState: State<ResourceState<ResponseMovieGenresListModel>> = _genresState
 
-    private var _popularMoviesByGenre =  repository.getDiscoverMovies("")
+    private var _popularMoviesByGenre =  repositoryImpl.getAllDiscoverMovies("")
     var popularMoviesByGenre: Flow<PagingData<MovieModel>> =
         _popularMoviesByGenre
 
     fun fetchGenres() {
         viewModelScope.launch {
-            repository.fetchMoviesGenre().collect { response ->
+            repositoryImpl.getAllMovieGenres().collect { response ->
                 _genresState.value = response
             }
         }
@@ -45,17 +44,17 @@ class TestViewModel @Inject constructor(
 
     fun getPopularMoviesByGenre(id: String) {
         viewModelScope.launch {
-            popularMoviesByGenre = repository.getDiscoverMovies(id)
+            popularMoviesByGenre = repositoryImpl.getAllDiscoverMovies(id)
         }
     }
 
     fun getPopularMoviesByGenre2(id: String): Flow<PagingData<MovieModel>> {
-        return repository.getDiscoverMovies(id)
+        return repositoryImpl.getAllDiscoverMovies(id)
     }
 
     fun addGenres(genres: List<GenresMovieModel>) {
         viewModelScope.launch {
-            repository.insertGenresList(genres)
+            repositoryImpl.insertMovieGenres(genres)
         }
     }
 

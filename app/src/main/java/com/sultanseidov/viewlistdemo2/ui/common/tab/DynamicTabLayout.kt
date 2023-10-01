@@ -17,6 +17,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.sultanseidov.viewlistdemo2.data.model.genre.GenresMovieModel
 import com.sultanseidov.viewlistdemo2.ui.common.movielist.MovieList
 import com.sultanseidov.viewlistdemo2.viewmodel.DiscoverViewModel
+import com.sultanseidov.viewlistdemo2.viewmodel.SearchViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagingApi::class)
@@ -69,17 +70,17 @@ fun Tabs(pagerState: PagerState, tabTitles: List<String>) {
 fun TabsContent(
     pagerState: PagerState,
     genreGroups: List<GenresMovieModel>,
-    discoverViewModel: DiscoverViewModel = hiltViewModel()
+    searchViewModel: SearchViewModel = hiltViewModel()
 ) {
     fun launch() {
-        discoverViewModel.fetchDiscoverMovies(genreGroups[pagerState.currentPage].id.toString())
+        searchViewModel.fetchDiscoverMovies(genreGroups[pagerState.currentPage].id.toString())
         //discoverViewModel.fetchDiscoverTvShows(genreGroups[pagerState.currentPage].id.toString())
 
     }
 
     launch()
 
-    val movies = discoverViewModel.discoverMoviesState.collectAsLazyPagingItems()
+    val movies = searchViewModel.discoverMoviesState.collectAsLazyPagingItems()
     //val tvShows = discoverViewModel.discoverTvShowsState.collectAsLazyPagingItems()
 
     HorizontalPager(count = genreGroups.size, state = pagerState) { page ->

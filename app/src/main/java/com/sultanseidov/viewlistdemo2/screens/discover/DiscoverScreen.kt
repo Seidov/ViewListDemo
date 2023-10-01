@@ -10,7 +10,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.sultanseidov.viewlistdemo2.ui.common.tab.TabScreen
 import com.sultanseidov.viewlistdemo2.viewmodel.DiscoverViewModel
 
-@OptIn(ExperimentalPagerApi::class)
 @ExperimentalCoilApi
 @ExperimentalPagingApi
 @Composable
@@ -19,15 +18,7 @@ fun DiscoverScreen(
     discoverViewModel: DiscoverViewModel = hiltViewModel()
 
 ) {
-
-    fun launch() {
-
-        discoverViewModel.fetchGenres()
-    }
-
-    launch()
-
     Column {
-        TabScreen(discoverViewModel.genresState.value.genres)
+
     }
 }
