@@ -9,8 +9,14 @@ object Constants {
     const val MOVIES_TABLE = "movies_table"
     const val MOVIES_REMOTE_KEYS_TABLE = "movies_remote_keys_table"
 
+    const val MOVIES_NEW_TABLE = "movies_new_table"
+    const val MOVIES_NEW_REMOTE_KEYS_TABLE = "movies_new_remote_keys_table"
+
     const val TV_SHOW_TABLE = "tv_show_table"
     const val TV_SHOW_REMOTE_KEYS_TABLE = "tv_show_remote_keys_table"
+
+    const val TV_SHOW_NEW_TABLE = "tv_show_new_table"
+    const val TV_SHOW_NEW_REMOTE_KEYS_TABLE = "tv_show_new_remote_keys_table"
 
     const val GENRES_MOVIE_TABLE = "genres_movie_table"
     const val GENRES_TV_SHOWS_TABLE = "genres_tv_shows_table"

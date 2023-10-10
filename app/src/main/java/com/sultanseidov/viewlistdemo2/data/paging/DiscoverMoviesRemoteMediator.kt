@@ -6,15 +6,16 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.sultanseidov.viewlistdemo2.BuildConfig.API_KEY
-import com.sultanseidov.viewlistdemo2.data.model.movie.MovieModel
-import com.sultanseidov.viewlistdemo2.data.model.movie.MoviesRemoteKeys
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
-import com.sultanseidov.viewlistdemo2.data.remote.ITmdbApi
+import com.sultanseidov.viewlistdemo2.data.model.dto.movie.MoviesRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.remote.ITMDBApi
+import com.sultanseidov.viewlistdemo2.data.model.dto.movie.toMovieList
+import com.sultanseidov.viewlistdemo2.domain.model.MovieModel
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 class DiscoverMoviesRemoteMediator @Inject constructor(
-    private val iTmdbApi: ITmdbApi,
+    private val iTmdbApi: ITMDBApi,
     private val appDatabase: AppDatabase,
     private val with_genres: String
 ) : RemoteMediator<Int, MovieModel>() {
@@ -81,16 +82,16 @@ class DiscoverMoviesRemoteMediator @Inject constructor(
                             prevPage = if (pageNumber <= 1) null else pageNumber - 1
                         }
 
-                        val keys = responseData.movieModels.map { movie ->
+                        val keys = responseData.toMovieList().map { movie ->
                             MoviesRemoteKeys(
-                                id = movie.movieId,
+                                id = movie.id,
                                 prevPage = prevPage,
                                 nextPage = nextPage,
                                 lastUpdated = System.currentTimeMillis()
                             )
                         }
 
-                        popularMoviesDao.insertDiscoverMovies(discoverMovies = responseData.movieModels)
+                        popularMoviesDao.insertDiscoverMovies(discoverMovies = responseData.toMovieList())
                         popularMoviesRemoteKeysDao.insertAllRemoteKeys(remoteKeys = keys)
                         //myViewListDao.insertMovie( responseData.movieModels[0])
                     }
@@ -108,7 +109,7 @@ class DiscoverMoviesRemoteMediator @Inject constructor(
         state: PagingState<Int, MovieModel>,
     ): MoviesRemoteKeys? {
         return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.movieId?.let { id ->
+            state.closestItemToPosition(position)?.id?.let { id ->
                 popularMoviesRemoteKeysDao.getRemoteKeys(id = id)
             }
         }
@@ -119,7 +120,7 @@ class DiscoverMoviesRemoteMediator @Inject constructor(
     ): MoviesRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { movie ->
-                popularMoviesRemoteKeysDao.getRemoteKeys(id = movie.movieId)
+                popularMoviesRemoteKeysDao.getRemoteKeys(id = movie.id)
             }
     }
 
@@ -128,7 +129,7 @@ class DiscoverMoviesRemoteMediator @Inject constructor(
     ): MoviesRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { movie ->
-                popularMoviesRemoteKeysDao.getRemoteKeys(id = movie.movieId)
+                popularMoviesRemoteKeysDao.getRemoteKeys(id = movie.id)
             }
     }
 

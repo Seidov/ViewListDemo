@@ -4,17 +4,17 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowsRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.model.dto.tvshow.TvShowsRemoteKeys
 
 @Dao
 interface DiscoverTvShowsRemoteKeysDao {
 
-    @Query("SELECT * FROM tv_show_remote_keys_table WHERE id =:id")
+    @Query("SELECT * FROM tv_show_new_remote_keys_table WHERE id =:id")
     suspend fun getRemoteKeys(id: Int): TvShowsRemoteKeys
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllRemoteKeys(remoteKeys: List<TvShowsRemoteKeys>)
 
-    @Query("DELETE FROM tv_show_remote_keys_table")
+    @Query("DELETE FROM tv_show_new_remote_keys_table")
     suspend fun deleteAllRemoteKeys()
 }

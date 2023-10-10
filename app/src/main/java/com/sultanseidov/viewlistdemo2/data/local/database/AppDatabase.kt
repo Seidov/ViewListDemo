@@ -3,27 +3,28 @@ package com.sultanseidov.viewlistdemo2.data.local.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.sultanseidov.viewlistdemo2.data.model.genre.GenresMovieModel
-import com.sultanseidov.viewlistdemo2.data.model.movie.MoviesRemoteKeys
-import com.sultanseidov.viewlistdemo2.data.model.movie.TheTypeConverters
-import com.sultanseidov.viewlistdemo2.data.model.viewlist.ViewListMoviesModel
-import com.sultanseidov.viewlistdemo2.data.model.movie.MovieModel
-import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowModel
-import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowsRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.model.dto.genre.GenresMovieModel
+import com.sultanseidov.viewlistdemo2.data.model.dto.movie.TheTypeConverters
 import com.sultanseidov.viewlistdemo2.data.model.pinviewlist.PinViewListModel
 import com.sultanseidov.viewlistdemo2.data.local.dao.*
-import com.sultanseidov.viewlistdemo2.data.model.genre.GenresTvShowModel
-import com.sultanseidov.viewlistdemo2.data.model.viewlist.ViewListTvShowsModel
+import com.sultanseidov.viewlistdemo2.data.model.dto.genre.GenresTvShowModel
+import com.sultanseidov.viewlistdemo2.data.model.dto.movie.MoviesRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.model.dto.tvshow.TvShowsRemoteKeys
+import com.sultanseidov.viewlistdemo2.domain.model.MovieModel
+import com.sultanseidov.viewlistdemo2.domain.model.MoviesViewList
+import com.sultanseidov.viewlistdemo2.domain.model.TvShowModel
+import com.sultanseidov.viewlistdemo2.domain.model.TVShowsViewList
 
 @TypeConverters(TheTypeConverters::class)
 
 @Database(
-    entities = [MovieModel::class, MoviesRemoteKeys::class,
+    entities = [
+        MovieModel::class, MoviesRemoteKeys::class,
         TvShowModel::class, TvShowsRemoteKeys::class,
         GenresMovieModel::class, GenresTvShowModel::class,
-        ViewListMoviesModel::class, ViewListTvShowsModel::class,
+        MoviesViewList::class, TVShowsViewList::class,
         PinViewListModel::class],
-    version = 22,
+    version = 33,
     exportSchema = false
 )
 abstract class AppDatabase() : RoomDatabase() {

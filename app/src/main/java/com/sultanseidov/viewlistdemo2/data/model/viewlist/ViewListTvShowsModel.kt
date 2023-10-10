@@ -1,12 +1,9 @@
 package com.sultanseidov.viewlistdemo2.data.model.viewlist
 
-import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.sultanseidov.viewlistdemo2.data.model.tvshow.BaseTvShowModel
-import com.sultanseidov.viewlistdemo2.util.Constants.VIEW_LIST_TV_SHOWS_TABLE
+import com.sultanseidov.viewlistdemo2.data.model.dto.tvshow.BaseTvShowModel
 
-@Entity(tableName = VIEW_LIST_TV_SHOWS_TABLE)
 data class ViewListTvShowsModel(
     @PrimaryKey(autoGenerate = true)
     override var pk: Long = 0,

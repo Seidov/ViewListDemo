@@ -8,15 +8,16 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.sultanseidov.viewlistdemo2.BuildConfig.API_KEY
-import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowModel
-import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowsRemoteKeys
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
-import com.sultanseidov.viewlistdemo2.data.remote.ITmdbApi
+import com.sultanseidov.viewlistdemo2.data.model.dto.tvshow.TvShowsRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.remote.ITMDBApi
+import com.sultanseidov.viewlistdemo2.data.model.dto.tvshow.toTVShowList
+import com.sultanseidov.viewlistdemo2.domain.model.TvShowModel
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 class DiscoverTvShowsRemoteMediator @Inject constructor(
-    private val iTmdbApi: ITmdbApi,
+    private val iTmdbApi: ITMDBApi,
     private val appDatabase: AppDatabase,
     private val with_genres: String
 ) : RemoteMediator<Int, TvShowModel>() {
@@ -84,17 +85,17 @@ class DiscoverTvShowsRemoteMediator @Inject constructor(
                             prevPage = if (pageNumber <= 1) null else pageNumber - 1
                         }
 
-                        val keys = responseData.tvShowModels?.map { tvShowModel ->
+                        val keys = responseData.toTVShowList().map { tvShowModel ->
                             TvShowsRemoteKeys(
-                                id = tvShowModel.tvShowId,
+                                id = tvShowModel.id,
                                 prevPage = prevPage,
                                 nextPage = nextPage,
                                 lastUpdated = System.currentTimeMillis()
                             )
                         }
 
-                        discoverTvShowsDao.insertDiscoverTvShows(discoverTvShows = responseData.tvShowModels)
-                        discoverTvShowsRemoteKeysDao.insertAllRemoteKeys(remoteKeys = keys!!)
+                        discoverTvShowsDao.insertDiscoverTvShows(discoverTvShows = responseData.toTVShowList())
+                        discoverTvShowsRemoteKeysDao.insertAllRemoteKeys(remoteKeys = keys)
                     }
                 }
 
@@ -112,7 +113,7 @@ class DiscoverTvShowsRemoteMediator @Inject constructor(
         state: PagingState<Int, TvShowModel>,
     ): TvShowsRemoteKeys? {
         return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.tvShowId?.let { id ->
+            state.closestItemToPosition(position)?.id?.let { id ->
                 discoverTvShowsRemoteKeysDao.getRemoteKeys(id = id)
             }
         }
@@ -123,7 +124,7 @@ class DiscoverTvShowsRemoteMediator @Inject constructor(
     ): TvShowsRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { tvShowsModel ->
-                discoverTvShowsRemoteKeysDao.getRemoteKeys(id = tvShowsModel.tvShowId)
+                discoverTvShowsRemoteKeysDao.getRemoteKeys(id = tvShowsModel.id)
             }
     }
 
@@ -132,7 +133,7 @@ class DiscoverTvShowsRemoteMediator @Inject constructor(
     ): TvShowsRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { tvShowsModel ->
-                discoverTvShowsRemoteKeysDao.getRemoteKeys(id = tvShowsModel.tvShowId)
+                discoverTvShowsRemoteKeysDao.getRemoteKeys(id = tvShowsModel.id)
             }
     }
 

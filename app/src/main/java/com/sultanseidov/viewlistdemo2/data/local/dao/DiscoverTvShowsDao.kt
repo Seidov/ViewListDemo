@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sultanseidov.viewlistdemo2.data.model.tvshow.TvShowModel
+import com.sultanseidov.viewlistdemo2.domain.model.TvShowModel
 
 @Dao
 interface DiscoverTvShowsDao {
@@ -13,10 +13,10 @@ interface DiscoverTvShowsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDiscoverTvShows(discoverTvShows: List<TvShowModel>)
 
-    @Query("SELECT * FROM tv_show_table")
+    @Query("SELECT * FROM tv_show_new_table")
     fun getAllDiscoverTvShows(): PagingSource<Int, TvShowModel>
 
-    @Query("DELETE FROM tv_show_table")
+    @Query("DELETE FROM tv_show_new_table")
     suspend fun deleteAllDiscoverTvShows()
 
 }

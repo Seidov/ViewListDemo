@@ -1,14 +1,11 @@
 package com.sultanseidov.viewlistdemo2.data.model.viewlist
 
-import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.sultanseidov.viewlistdemo2.data.model.movie.BaseMovieModel
-import com.sultanseidov.viewlistdemo2.util.Constants.VIEW_LIST_MOVIES_TABLE
+import com.sultanseidov.viewlistdemo2.data.model.dto.movie.BaseMovieModel
 
 
-@Entity(tableName = VIEW_LIST_MOVIES_TABLE)
-data class ViewListMoviesModel(
+data class ViewListMoviesModel2(
     @PrimaryKey(autoGenerate = true)
     override var pk: Long = 0,
     @SerializedName("id")

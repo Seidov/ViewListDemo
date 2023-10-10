@@ -1,8 +1,8 @@
 package com.sultanseidov.viewlistdemo2.di
 
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
-import com.sultanseidov.viewlistdemo2.data.remote.ITmdbApi
-import com.sultanseidov.viewlistdemo2.data.repository.IRepository
+import com.sultanseidov.viewlistdemo2.data.remote.ITMDBApi
+import com.sultanseidov.viewlistdemo2.domain.repository.IRepository
 import com.sultanseidov.viewlistdemo2.data.repository.RepositoryImpl
 import com.sultanseidov.viewlistdemo2.util.Constants.BASE_URL
 import dagger.Module
@@ -43,13 +43,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideTmdbApi(retrofit: Retrofit): ITmdbApi {
-        return retrofit.create(ITmdbApi::class.java)
+    fun provideTmdbApi(retrofit: Retrofit): ITMDBApi {
+        return retrofit.create(ITMDBApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideRepository(iTmdbApi: ITmdbApi, appDatabase: AppDatabase): IRepository {
+    fun provideRepository(iTmdbApi: ITMDBApi, appDatabase: AppDatabase): IRepository {
         return RepositoryImpl(iTmdbApi = iTmdbApi, appDatabase = appDatabase)
     }
 }
