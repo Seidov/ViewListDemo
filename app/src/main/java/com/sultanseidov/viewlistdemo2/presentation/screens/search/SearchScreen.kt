@@ -20,12 +20,12 @@ fun SearchScreen(
 ) {
 
     fun launch() {
-        searchViewModel.fetchGenres()
+        //searchViewModel.fetchGenres()
     }
 
     launch()
 
     Column {
-        TabScreen(searchViewModel.genresState.value.genres)
+        //TabScreen(searchViewModel.genresState.value.genres)
     }
 }

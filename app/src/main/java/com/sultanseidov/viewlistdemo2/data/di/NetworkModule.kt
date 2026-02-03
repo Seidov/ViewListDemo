@@ -1,7 +1,7 @@
-package com.sultanseidov.viewlistdemo2.di
+package com.sultanseidov.viewlistdemo2.data.di
 
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
-import com.sultanseidov.viewlistdemo2.data.remote.ITMDBApi
+import com.sultanseidov.viewlistdemo2.data.remote.api.ITMDBApi
 import com.sultanseidov.viewlistdemo2.domain.repository.IRepository
 import com.sultanseidov.viewlistdemo2.data.repository.RepositoryImpl
 import com.sultanseidov.viewlistdemo2.util.Constants.BASE_URL
@@ -15,7 +15,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-
 
 @ExperimentalSerializationApi
 @Module
@@ -52,4 +51,5 @@ object NetworkModule {
     fun provideRepository(iTmdbApi: ITMDBApi, appDatabase: AppDatabase): IRepository {
         return RepositoryImpl(iTmdbApi = iTmdbApi, appDatabase = appDatabase)
     }
+
 }

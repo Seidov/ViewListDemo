@@ -1,4 +1,4 @@
-package com.sultanseidov.viewlistdemo2.data.paging
+package com.sultanseidov.viewlistdemo2.data.remote.paging
 
 
 import android.util.Log
@@ -9,9 +9,9 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.sultanseidov.viewlistdemo2.BuildConfig.API_KEY
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
-import com.sultanseidov.viewlistdemo2.data.model.dto.tvshow.TvShowsRemoteKeys
-import com.sultanseidov.viewlistdemo2.data.remote.ITMDBApi
-import com.sultanseidov.viewlistdemo2.data.model.dto.tvshow.toTVShowList
+import com.sultanseidov.viewlistdemo2.data.model.dto.old.TvShowsRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.model.mappers.tvshow.toTVShowList
+import com.sultanseidov.viewlistdemo2.data.remote.api.ITMDBApi
 import com.sultanseidov.viewlistdemo2.domain.model.TvShowModel
 import javax.inject.Inject
 

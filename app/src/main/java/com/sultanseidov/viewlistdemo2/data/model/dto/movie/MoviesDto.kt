@@ -8,24 +8,3 @@ data class MoviesDto(
     val total_pages: Int,
     val total_results: Int
 )
-
-fun MoviesDto.toMovieList(): List<MovieModel> {
-    return results.map { result ->
-        MovieModel(
-            result.id,
-            result.adult,
-            result.backdrop_path,
-            result.genre_ids,
-            result.original_language,
-            result.original_title,
-            result.overview,
-            result.popularity,
-            result.poster_path,
-            result.release_date,
-            result.title,
-            result.video,
-            result.vote_average,
-            result.vote_count
-        )
-    }
-}

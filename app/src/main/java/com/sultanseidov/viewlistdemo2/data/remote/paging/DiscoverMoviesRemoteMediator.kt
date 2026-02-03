@@ -1,4 +1,4 @@
-package com.sultanseidov.viewlistdemo2.data.paging
+package com.sultanseidov.viewlistdemo2.data.remote.paging
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -7,9 +7,9 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.sultanseidov.viewlistdemo2.BuildConfig.API_KEY
 import com.sultanseidov.viewlistdemo2.data.local.database.AppDatabase
-import com.sultanseidov.viewlistdemo2.data.model.dto.movie.MoviesRemoteKeys
-import com.sultanseidov.viewlistdemo2.data.remote.ITMDBApi
-import com.sultanseidov.viewlistdemo2.data.model.dto.movie.toMovieList
+import com.sultanseidov.viewlistdemo2.data.model.dto.old.MoviesRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.model.mappers.movie.toMovieList
+import com.sultanseidov.viewlistdemo2.data.remote.api.ITMDBApi
 import com.sultanseidov.viewlistdemo2.domain.model.MovieModel
 import javax.inject.Inject
 

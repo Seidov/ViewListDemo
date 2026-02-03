@@ -1,8 +1,7 @@
 package com.sultanseidov.viewlistdemo2.data.model.base
 
-sealed class ResourceState<out T> {
-    object Idle : ResourceState<Nothing>()
-    object Loading : ResourceState<Nothing>()
-    data class Success<T>(val data: T?) : ResourceState<T>()
-    data class Error(val error: Throwable) : ResourceState<Nothing>()
+sealed class ResourceState<T>(val data: T? = null, val message:String? = null) {
+    class Success<T>(data: T) : ResourceState<T>(data = data)
+    class Error<T>(message: String, data:T? = null) : ResourceState<T>(data = data,message=message)
+    class Loading<T>(data:T?= null) : ResourceState<T>(data=data)
 }

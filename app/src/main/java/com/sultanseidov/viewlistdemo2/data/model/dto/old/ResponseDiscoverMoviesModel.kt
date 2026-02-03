@@ -1,4 +1,4 @@
-package com.sultanseidov.viewlistdemo2.data.model.dto.movie
+package com.sultanseidov.viewlistdemo2.data.model.dto.old
 
 import com.google.gson.annotations.SerializedName
 import com.sultanseidov.viewlistdemo2.domain.model.MovieModel

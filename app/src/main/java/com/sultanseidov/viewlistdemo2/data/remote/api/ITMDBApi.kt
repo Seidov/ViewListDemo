@@ -1,7 +1,6 @@
-package com.sultanseidov.viewlistdemo2.data.remote
+package com.sultanseidov.viewlistdemo2.data.remote.api
 
-import com.sultanseidov.viewlistdemo2.data.model.dto.genre.ResponseMovieGenresListModel
-import com.sultanseidov.viewlistdemo2.data.model.dto.genre.ResponseTVShowGenresListModel
+import com.sultanseidov.viewlistdemo2.data.model.dto.genre.GenresDto
 import com.sultanseidov.viewlistdemo2.data.model.dto.movie.MoviesDto
 import com.sultanseidov.viewlistdemo2.data.model.dto.tvshow.TVShowDto
 import retrofit2.Response
@@ -29,11 +28,11 @@ interface ITMDBApi {
     @GET("genre/movie/list")
     suspend fun getMovieGenresList(
         @Query("api_key") api_key: String
-    ): ResponseMovieGenresListModel
+    ): GenresDto
 
     @GET("genre/movie/list")
     suspend fun getTVShowGenresList(
         @Query("api_key") api_key: String
-    ): ResponseTVShowGenresListModel
+    ): GenresDto
 
 }

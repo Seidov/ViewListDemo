@@ -1,4 +1,4 @@
-package com.sultanseidov.viewlistdemo2.di
+package com.sultanseidov.viewlistdemo2.data.di
 
 import android.content.Context
 import androidx.room.Room

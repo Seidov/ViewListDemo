@@ -1,4 +1,4 @@
-package com.sultanseidov.viewlistdemo2.data.model.dto.tvshow
+package com.sultanseidov.viewlistdemo2.data.model.dto.old
 
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName

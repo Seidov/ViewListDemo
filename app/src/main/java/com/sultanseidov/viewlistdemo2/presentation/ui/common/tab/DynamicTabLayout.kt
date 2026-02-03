@@ -16,8 +16,6 @@ import com.google.accompanist.pager.*
 import com.google.accompanist.pager.rememberPagerState
 import com.sultanseidov.viewlistdemo2.data.model.dto.genre.GenresMovieModel
 import com.sultanseidov.viewlistdemo2.presentation.ui.common.movielist.MovieList
-import com.sultanseidov.viewlistdemo2.presentation.ui.common.movielist.TvShowsList
-import com.sultanseidov.viewlistdemo2.presentation.viewmodel.DiscoverViewModel
 import com.sultanseidov.viewlistdemo2.presentation.viewmodel.SearchViewModel
 import kotlinx.coroutines.launch
 

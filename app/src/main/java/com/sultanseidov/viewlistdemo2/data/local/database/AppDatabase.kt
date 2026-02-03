@@ -8,8 +8,8 @@ import com.sultanseidov.viewlistdemo2.data.model.dto.movie.TheTypeConverters
 import com.sultanseidov.viewlistdemo2.data.model.pinviewlist.PinViewListModel
 import com.sultanseidov.viewlistdemo2.data.local.dao.*
 import com.sultanseidov.viewlistdemo2.data.model.dto.genre.GenresTvShowModel
-import com.sultanseidov.viewlistdemo2.data.model.dto.movie.MoviesRemoteKeys
-import com.sultanseidov.viewlistdemo2.data.model.dto.tvshow.TvShowsRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.model.dto.old.MoviesRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.model.dto.old.TvShowsRemoteKeys
 import com.sultanseidov.viewlistdemo2.domain.model.MovieModel
 import com.sultanseidov.viewlistdemo2.domain.model.MoviesViewList
 import com.sultanseidov.viewlistdemo2.domain.model.TvShowModel

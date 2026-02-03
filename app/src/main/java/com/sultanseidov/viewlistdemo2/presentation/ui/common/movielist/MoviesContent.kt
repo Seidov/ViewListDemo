@@ -46,9 +46,7 @@ fun MovieList(lazyMovieItems: LazyPagingItems<MovieModel>) {
     ) {
         items(
             items = lazyMovieItems,
-            key = { movieItem ->
-                movieItem.id
-            }
+            key = { movieItem -> movieItem.id }
         ) { movieItem ->
             movieItem?.let {
                 MovieItem(movieItem = it)

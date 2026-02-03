@@ -2,7 +2,7 @@ package com.sultanseidov.viewlistdemo2.data.model.viewlist
 
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.sultanseidov.viewlistdemo2.data.model.dto.tvshow.BaseTvShowModel
+import com.sultanseidov.viewlistdemo2.data.model.dto.old.BaseTvShowModel
 
 data class ViewListTvShowsModel(
     @PrimaryKey(autoGenerate = true)

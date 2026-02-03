@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sultanseidov.viewlistdemo2.data.model.dto.tvshow.TvShowsRemoteKeys
+import com.sultanseidov.viewlistdemo2.data.model.dto.old.TvShowsRemoteKeys
 
 @Dao
 interface DiscoverTvShowsRemoteKeysDao {

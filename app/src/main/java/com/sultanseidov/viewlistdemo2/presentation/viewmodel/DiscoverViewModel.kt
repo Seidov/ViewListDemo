@@ -9,7 +9,6 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.sultanseidov.viewlistdemo2.data.model.base.ResourceState
-import com.sultanseidov.viewlistdemo2.data.model.dto.genre.ResponseMovieGenresListModel
 import com.sultanseidov.viewlistdemo2.data.repository.RepositoryImpl
 import com.sultanseidov.viewlistdemo2.domain.model.MovieModel
 import com.sultanseidov.viewlistdemo2.domain.model.TvShowModel
@@ -26,8 +25,8 @@ class DiscoverViewModel @Inject constructor(
 ) : ViewModel(){
 
     init {
-        getPins()
-        fetchDiscoverTvShows("")
+        //getPins()
+        //fetchDiscoverTvShows("")
     }
 
     private val _discoverMoviesState = MutableStateFlow<PagingData<MovieModel>>(PagingData.empty())
@@ -36,8 +35,8 @@ class DiscoverViewModel @Inject constructor(
     private val _discoverTvShowsState = MutableStateFlow<PagingData<TvShowModel>>(PagingData.empty())
     val discoverTvShowsState = _discoverTvShowsState
 
-    private val _genresState = mutableStateOf(ResponseMovieGenresListModel(emptyList()))
-    val genresState: State<ResponseMovieGenresListModel> = _genresState
+    //private val _genresState = mutableStateOf(ResponseMovieGenresListModel(emptyList()))
+    //val genresState: State<ResponseMovieGenresListModel> = _genresState
 
     private fun fetchDiscoverTvShows(genre: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -69,6 +68,7 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
+    /*
     fun fetchGenres() {
         viewModelScope.launch {
             repositoryImpl.getAllMovieGenres().collect { response ->
@@ -89,4 +89,5 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
+     */
 }

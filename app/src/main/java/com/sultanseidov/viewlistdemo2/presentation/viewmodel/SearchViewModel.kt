@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.sultanseidov.viewlistdemo2.data.model.base.ResourceState
-import com.sultanseidov.viewlistdemo2.data.model.dto.genre.ResponseMovieGenresListModel
 import com.sultanseidov.viewlistdemo2.data.model.pinviewlist.PinViewListModel
 import com.sultanseidov.viewlistdemo2.data.repository.RepositoryImpl
 import com.sultanseidov.viewlistdemo2.domain.model.MovieModel
@@ -30,12 +29,13 @@ class SearchViewModel@Inject constructor(
     val discoverTvShowsState = _discoverTvShowsState
 
 
-    private val _genresState = mutableStateOf(ResponseMovieGenresListModel(emptyList()))
-    val genresState: State<ResponseMovieGenresListModel> = _genresState
+    //private val _genresState = mutableStateOf(ResponseMovieGenresListModel(emptyList()))
+    //val genresState: State<ResponseMovieGenresListModel> = _genresState
 
     private val _pinsState = mutableStateOf(listOf<PinViewListModel>())
     val pinsState: State<List<PinViewListModel>> = _pinsState
 
+    /*
     fun fetchGenres() {
         viewModelScope.launch {
             repositoryImpl.getAllMovieGenres().collect { response ->
@@ -56,6 +56,8 @@ class SearchViewModel@Inject constructor(
         }
     }
 
+
+     */
     fun fetchDiscoverMovies(genre:String) {
         viewModelScope.launch {
             repositoryImpl.getAllDiscoverMovies(genre).cachedIn(viewModelScope).collect {

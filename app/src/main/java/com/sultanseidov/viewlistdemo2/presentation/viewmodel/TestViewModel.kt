@@ -1,19 +1,9 @@
 package com.sultanseidov.viewlistdemo2.presentation.viewmodel
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.PagingData
-import com.sultanseidov.viewlistdemo2.data.model.dto.genre.GenresMovieModel
-import com.sultanseidov.viewlistdemo2.data.model.dto.genre.ResponseMovieGenresListModel
-import com.sultanseidov.viewlistdemo2.data.model.base.ResourceState
 import com.sultanseidov.viewlistdemo2.data.repository.RepositoryImpl
-import com.sultanseidov.viewlistdemo2.domain.model.MovieModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -26,6 +16,7 @@ class TestViewModel @Inject constructor(
     val getPopularMovies = repositoryImpl.getAllDiscoverMovies("")
 
 
+    /*
     private val _genresState =
         mutableStateOf<ResourceState<ResponseMovieGenresListModel>>(ResourceState.Success(null))
     val genresState: State<ResourceState<ResponseMovieGenresListModel>> = _genresState
@@ -57,6 +48,8 @@ class TestViewModel @Inject constructor(
             repositoryImpl.insertMovieGenres(genres)
         }
     }
+
+     */
 
 
 /*

@@ -1,4 +1,4 @@
-package com.sultanseidov.viewlistdemo2.data.model.dto.movie
+package com.sultanseidov.viewlistdemo2.data.model.dto.old
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

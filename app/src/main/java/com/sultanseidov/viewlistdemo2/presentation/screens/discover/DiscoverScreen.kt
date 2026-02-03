@@ -20,7 +20,6 @@ fun DiscoverScreen(
 ) {
     fun launch() {
 
-        discoverViewModel.fetchGenres()
     }
 
     launch()
