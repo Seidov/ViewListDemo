@@ -30,7 +30,7 @@ interface ITMDBApi {
         @Query("api_key") api_key: String
     ): GenresDto
 
-    @GET("genre/movie/list")
+    @GET("genre/tv/list")
     suspend fun getTVShowGenresList(
         @Query("api_key") api_key: String
     ): GenresDto

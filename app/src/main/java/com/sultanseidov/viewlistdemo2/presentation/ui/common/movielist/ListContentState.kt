@@ -13,9 +13,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun LoadingView(
-    modifier: Modifier = Modifier
-) {
+fun LoadingView(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,

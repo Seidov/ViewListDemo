@@ -5,14 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sultanseidov.viewlistdemo2.data.model.base.ResourceState
+import androidx.paging.cachedIn
 import com.sultanseidov.viewlistdemo2.domain.usecase.discover.DiscoverUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NewV @Inject constructor(
+@HiltViewModel
+class NewVM @Inject constructor(
     private val discoverUseCase: DiscoverUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -27,24 +28,16 @@ class NewV @Inject constructor(
     }
 
     fun getBlogs() {
-
         job?.cancel()
-        job = discoverUseCase.getDiscoverTVShowsUseCase.executeGetTVShows("").onEach {
-            when (it) {
-                is ResourceState.Success -> {
-                    _state.value = NewState(movies = it.data)
-                }
-
-                is ResourceState.Error -> {
-                    _state.value = NewState(error = it.message ?: "Error!")
-                }
-
-                is ResourceState.Loading -> {
-                    _state.value = NewState(isLoading = true)
-                }
+        job = viewModelScope.launch {
+            try {
+                val flow = discoverUseCase.getDiscoverTVShowsUseCase.execute(Unit)
+                    .cachedIn(viewModelScope)
+                _state.value = NewState(movies = flow)
+            } catch (e: Exception) {
+                _state.value = NewState(error = e.message ?: "Error!")
             }
-        }.launchIn(viewModelScope)
-
+        }
     }
 
 }

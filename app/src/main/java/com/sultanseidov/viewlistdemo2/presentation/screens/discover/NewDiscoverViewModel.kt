@@ -29,6 +29,9 @@ class NewDiscoverViewModel @Inject constructor(
     private val _moviesState: MutableStateFlow<PagingData<MovieModel>> = MutableStateFlow(value = PagingData.empty())
     val moviesState: MutableStateFlow<PagingData<MovieModel>> get() = _moviesState
 
+    private val _tvShowsState: MutableStateFlow<PagingData<TvShowModel>> = MutableStateFlow(value = PagingData.empty())
+    val tvShowsState: MutableStateFlow<PagingData<TvShowModel>> get() = _tvShowsState
+
     init {
         onEvent(DiscoverEvent.GetHome)
     }
@@ -38,6 +41,7 @@ class NewDiscoverViewModel @Inject constructor(
             when (event) {
                 is DiscoverEvent.GetHome -> {
                     getMovies()
+                    getTvShows()
                 }
             }
         }
@@ -49,6 +53,15 @@ class NewDiscoverViewModel @Inject constructor(
             .cachedIn(viewModelScope)
             .collect {
                 _moviesState.value = it
+            }
+    }
+
+    private suspend fun getTvShows() {
+        discoverUseCase.getDiscoverTVShowsUseCase.execute(Unit)
+            .distinctUntilChanged()
+            .cachedIn(viewModelScope)
+            .collect {
+                _tvShowsState.value = it
             }
     }
 

@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,7 +14,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -23,74 +23,104 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
-import coil.annotation.ExperimentalCoilApi
+import androidx.paging.compose.itemKey
 import coil.compose.rememberAsyncImagePainter
 import com.sultanseidov.viewlistdemo2.R
 import com.sultanseidov.viewlistdemo2.domain.model.MovieModel
+import com.sultanseidov.viewlistdemo2.presentation.ui.theme.StarRed
 import com.sultanseidov.viewlistdemo2.screens.common.ErrorItem
 import com.sultanseidov.viewlistdemo2.screens.common.LoadingItem
 import com.sultanseidov.viewlistdemo2.screens.common.LoadingView
-import com.sultanseidov.viewlistdemo2.presentation.ui.theme.StarRed
 import com.sultanseidov.viewlistdemo2.util.Constants.IMAGE_BASE_URL
 
-
-@ExperimentalCoilApi
 @Composable
-fun MovieList(lazyMovieItems: LazyPagingItems<MovieModel>) {
+fun MovieList(
+    lazyMovieItems: LazyPagingItems<MovieModel>
+) {
 
     LazyColumn(
-        modifier = Modifier.fillMaxHeight().fillMaxWidth(),
-        contentPadding = PaddingValues(all = 12.dp),
+        modifier = Modifier
+            .fillMaxSize(),
+        contentPadding = PaddingValues(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+
         items(
-            items = lazyMovieItems,
-            key = { movieItem -> movieItem.id }
-        ) { movieItem ->
+            count = lazyMovieItems.itemCount,
+            key = lazyMovieItems.itemKey { it.id }
+        ) { index ->
+
+            val movieItem = lazyMovieItems[index]
+
             movieItem?.let {
                 MovieItem(movieItem = it)
             }
         }
 
         lazyMovieItems.apply {
+
             when {
+
                 loadState.refresh is LoadState.Loading -> {
-                    item { LoadingView(modifier = Modifier.fillParentMaxSize()) }
-                }
-                loadState.append is LoadState.Loading -> {
-                    item { LoadingItem() }
-                }
-                loadState.refresh is LoadState.Error -> {
-                    val e = lazyMovieItems.loadState.refresh as LoadState.Error
+
                     item {
+                        LoadingView(
+                            modifier = Modifier.fillParentMaxSize()
+                        )
+                    }
+                }
+
+                loadState.append is LoadState.Loading -> {
+
+                    item {
+                        LoadingItem()
+                    }
+                }
+
+                loadState.refresh is LoadState.Error -> {
+
+                    val error =
+                        loadState.refresh as LoadState.Error
+
+                    item {
+
                         ErrorItem(
-                            message = e.error.localizedMessage!!,
+                            message = error.error.localizedMessage
+                                ?: "Unknown Error",
                             modifier = Modifier.fillParentMaxSize(),
                             onClickRetry = { retry() }
                         )
                     }
                 }
+
                 loadState.append is LoadState.Error -> {
-                    val e = lazyMovieItems.loadState.append as LoadState.Error
+
+                    val error =
+                        loadState.append as LoadState.Error
+
                     item {
+
                         ErrorItem(
-                            message = e.error.localizedMessage!!,
+                            message = error.error.localizedMessage
+                                ?: "Unknown Error",
                             onClickRetry = { retry() }
                         )
-                        Log.e("MoviesContent", e.error.localizedMessage!!)
+
+                        Log.e(
+                            "MoviesContent",
+                            error.error.localizedMessage ?: "Unknown Error"
+                        )
                     }
                 }
             }
         }
-
     }
 }
 
-@ExperimentalCoilApi
 @Composable
-fun MovieItem(movieItem: MovieModel) {
-    val context = LocalContext.current
+fun MovieItem(
+    movieItem: MovieModel
+) {
 
     val painter = rememberAsyncImagePainter(
         model = IMAGE_BASE_URL + movieItem.poster_path
@@ -98,54 +128,58 @@ fun MovieItem(movieItem: MovieModel) {
 
     Box(
         modifier = Modifier
-            .clickable {
-                /*
-                val browserIntent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://")
-                )
-                ContextCompat.startActivity(context, browserIntent, null)
-                 */
-            }
+            .fillMaxWidth()
             .height(400.dp)
-            .fillMaxWidth(),
+            .clickable {
+
+            },
         contentAlignment = Alignment.BottomCenter
     ) {
+
         Image(
             modifier = Modifier.fillMaxSize(),
             painter = painter,
-            contentDescription = "Image",
+            contentDescription = "Movie Poster",
             contentScale = ContentScale.Crop
         )
+
         Surface(
             modifier = Modifier
-                .height(40.dp)
                 .fillMaxWidth()
+                .height(40.dp)
                 .alpha(ContentAlpha.medium),
             color = Color.Black
         ) {}
+
         Row(
             modifier = Modifier
-                .height(40.dp)
                 .fillMaxWidth()
+                .height(40.dp)
                 .padding(horizontal = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+
             Text(
                 text = buildAnnotatedString {
-                    //append("Photo by ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Black)) {
-                        movieItem.title?.let { append(it) }
+
+                    withStyle(
+                        style = SpanStyle(
+                            fontWeight = FontWeight.Black
+                        )
+                    ) {
+
+                        append(movieItem.title ?: "")
                     }
                 },
                 color = Color.White,
-                fontSize = MaterialTheme.typography.caption.fontSize,
+                fontSize = MaterialTheme.typography.body2.fontSize,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+
             LikeCounter(
-                modifier = Modifier.weight(3f),
+                modifier = Modifier.weight(1f),
                 painter = painterResource(id = R.drawable.ic_star),
                 likes = "${movieItem.popularity}"
             )
@@ -159,21 +193,25 @@ fun LikeCounter(
     painter: Painter,
     likes: String
 ) {
+
     Row(
         modifier = modifier.fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
+
         Icon(
             painter = painter,
             contentDescription = "Star Icon",
             tint = StarRed
         )
-        Divider(modifier = Modifier.width(6.dp))
+
+        Spacer(modifier = Modifier.width(6.dp))
+
         Text(
             text = likes,
             color = Color.White,
-            fontSize = MaterialTheme.typography.subtitle1.fontSize,
+            fontSize = MaterialTheme.typography.body2.fontSize,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
