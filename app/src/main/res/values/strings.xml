@@ -1,6 +1,3 @@
 <resources>
-    <string name="app_name">ViewList</string>
-    <string name="discover">Discover</string>
-    <string name="search">Search</string>
-    <string name="viewlist">ViewList</string>
+    <string name="app_name">ViewListDemo2</string>
 </resources>
