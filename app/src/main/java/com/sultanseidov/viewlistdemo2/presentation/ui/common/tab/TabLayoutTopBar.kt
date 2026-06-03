@@ -1,13 +1,12 @@
 package com.sultanseidov.viewlistdemo2.screens.discover
 
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.sultanseidov.viewlistdemo2.presentation.ui.theme.topAppBarBackgroundColor
-import com.sultanseidov.viewlistdemo2.presentation.ui.theme.topAppBarContentColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeTopBar(
     onSearchClicked: () -> Unit
@@ -15,11 +14,14 @@ fun HomeTopBar(
     TopAppBar(
         title = {
             Text(
-                text = "Home",
-                color = MaterialTheme.colors.topAppBarContentColor
+                text = "Home"
             )
         },
-        backgroundColor = MaterialTheme.colors.secondary,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurface
+        ),
         actions = {
             IconButton(onClick = onSearchClicked) {
                 Icon(

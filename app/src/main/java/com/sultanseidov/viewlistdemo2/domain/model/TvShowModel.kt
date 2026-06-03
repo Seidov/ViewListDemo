@@ -9,6 +9,7 @@ data class TvShowModel(
     val backdrop_path: String?,
     val first_air_date: String?,
     val genre_ids: List<Int>?,
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     val name: String?,
     val original_language: String?,
@@ -17,25 +18,6 @@ data class TvShowModel(
     val popularity: Double?,
     val poster_path: String?,
     val vote_average: Double?,
-    val vote_count: Int?
-) {
-    @PrimaryKey(autoGenerate = true)
-    var pk: Long = 0
-}
-
-fun TvShowModel.toTVShowViewList(): TVShowsViewList {
-    return TVShowsViewList(
-        backdrop_path,
-        first_air_date,
-        genre_ids,
-        id,
-        name,
-        original_language,
-        original_name,
-        overview,
-        popularity,
-        poster_path,
-        vote_average,
-        vote_count
-    )
-}
+    val vote_count: Int?,
+    val page: Int = 0,
+)

@@ -1,87 +1,59 @@
 package com.sultanseidov.viewlistdemo2.presentation.viewmodel
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sultanseidov.viewlistdemo2.data.model.base.ResourceState
-import com.sultanseidov.viewlistdemo2.data.model.pinviewlist.PinViewListModel
-import com.sultanseidov.viewlistdemo2.data.repository.RepositoryImpl
 import com.sultanseidov.viewlistdemo2.domain.model.MovieModel
-import com.sultanseidov.viewlistdemo2.domain.model.TvShowModel
+import com.sultanseidov.viewlistdemo2.domain.usecase.pin.WatchClassificationPipelineUseCase
+import com.sultanseidov.viewlistdemo2.domain.usecase.search.GetFilteredSearchResultsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel@Inject constructor(
-    private val repositoryImpl: RepositoryImpl
-):ViewModel(){
+class SearchViewModel @Inject constructor(
+    private val getFilteredSearchResultsUseCase: GetFilteredSearchResultsUseCase,
+    private val watchClassificationPipelineUseCase: WatchClassificationPipelineUseCase
+) : ViewModel() {
 
-    private val _discoverMoviesState = MutableStateFlow<PagingData<MovieModel>>(PagingData.empty())
-    val discoverMoviesState = _discoverMoviesState
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
 
-    private val _discoverTvShowsState = MutableStateFlow<PagingData<TvShowModel>>(PagingData.empty())
-    val discoverTvShowsState = _discoverTvShowsState
+    private val _isClassifying = MutableStateFlow(false)
+    val isClassifying = _isClassifying.asStateFlow()
 
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+    val searchResults: Flow<PagingData<MovieModel>> = _searchQuery
+        .debounce(500)
+        .flatMapLatest { query ->
+            if (query.isEmpty()) {
+                flowOf(PagingData.empty())
+            } else {
+                getFilteredSearchResultsUseCase(query)
+            }
+        }
+        .cachedIn(viewModelScope)
 
-    //private val _genresState = mutableStateOf(ResponseMovieGenresListModel(emptyList()))
-    //val genresState: State<ResponseMovieGenresListModel> = _genresState
+    fun onSearchQueryChanged(query: String) {
+        _searchQuery.value = query
+    }
 
-    private val _pinsState = mutableStateOf(listOf<PinViewListModel>())
-    val pinsState: State<List<PinViewListModel>> = _pinsState
-
-    /*
-    fun fetchGenres() {
+    fun onListClicked(movieId: Long) {
         viewModelScope.launch {
-            repositoryImpl.getAllMovieGenres().collect { response ->
-
-                when(response) {
-                    is ResourceState.Success -> {
-
-                        _genresState.value = response.data!!
-                        repositoryImpl.insertMovieGenres(response.data.genres)
-
-                    }
-                    is ResourceState.Error -> {
-
-                    }
-                    else -> {}
-                }
+            // Use a counter or check if already processing to avoid UI flicker
+            _isClassifying.value = true
+            try {
+                watchClassificationPipelineUseCase(movieId)
+            } catch (e: Exception) {
+                Log.e("SearchViewModel", "Classification error for movie $movieId: ${e.message}")
+            } finally {
+                _isClassifying.value = false
             }
         }
     }
-
-
-     */
-    fun fetchDiscoverMovies(genre:String) {
-        viewModelScope.launch {
-            repositoryImpl.getAllDiscoverMovies(genre).cachedIn(viewModelScope).collect {
-                _discoverMoviesState.value = it
-            }
-        }
-    }
-
-    private fun fetchDiscoverMovies2(genre: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repositoryImpl.getAllDiscoverMovies(genre).cachedIn(viewModelScope).collect {
-                _discoverMoviesState.value = it
-            }
-        }
-    }
-
-
-    fun fetchDiscoverTvShows(genre:String) {
-        viewModelScope.launch {
-            repositoryImpl.getAllDiscoverTvShows(genre).cachedIn(viewModelScope).collect {
-                _discoverTvShowsState.value = it
-            }
-        }
-    }
-
-
 }

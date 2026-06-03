@@ -5,22 +5,28 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.paging.ExperimentalPagingApi
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import com.sultanseidov.viewlistdemo2.data.local.PreferenceManager
 
 @OptIn(ExperimentalPagingApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var preferenceManager: PreferenceManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        val showOnboarding = !preferenceManager.isOnboardingCompleted()
+        
         setContent {
-
-            // This app draws behind the system bars, so we want to handle fitting system windows
-            //WindowCompat.setDecorFitsSystemWindows(window, false)
-            setContent {
-                ViewListApp {
+            ViewListApp(
+                showOnboardingInitially = showOnboarding,
+                finishActivity = {
                     finish()
                 }
-            }
-
+            )
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.sultanseidov.viewlistdemo2.presentation.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -7,7 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.sultanseidov.viewlistdemo2.presentation.screens.onboarding.OnboardingScreen
+import com.sultanseidov.viewlistdemo2.presentation.screens.pindetail.PinDetailScreen
+import androidx.navigation.compose.navigation
 
 
 /**
@@ -18,6 +23,8 @@ object MainDestinations {
     const val HOME_DISCOVER_ROUTE = "homeDiscover"
     const val DETAIL_DISCOVER_ROUTE = "detailDiscover"
     const val DETAIL_DISCOVER_ID_KEY = "detailDiscoverId"
+    const val PIN_DETAIL_ROUTE = "pinDetail"
+    const val PIN_DETAIL_ID_KEY = "pinId"
 }
 
 @Composable
@@ -37,17 +44,16 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = if (showOnboardingInitially) MainDestinations.ONBOARDING_ROUTE else startDestination
     ) {
-        /*
-        composable(MainDestinations.ONBOARDING_ROUTE) {
+        composable(MainDestinations.ONBOARDING_ROUTE) { backStackEntry ->
             // Intercept back in Onboarding: make it finish the activity
             BackHandler {
                 finishActivity()
             }
 
-            Onboarding(
-                onboardingComplete = {
+            OnboardingScreen(
+                onOnboardingComplete = {
                     // Set the flag so that onboarding is not shown next time.
                     onboardingComplete.value = true
                     actions.onboardingComplete()
@@ -55,16 +61,29 @@ fun NavGraph(
             )
         }
 
-         */
         navigation(
             route = MainDestinations.HOME_DISCOVER_ROUTE,
             startDestination = Tabs.DISCOVER.route
         ) {
             home(
                 onCourseSelected = actions.openCourse,
+                onPinSelected = actions.openPinDetail,
                 onBoardingComplete = onboardingComplete,
                 navController = navController,
                 modifier = modifier
+            )
+        }
+
+        composable(
+            "${MainDestinations.PIN_DETAIL_ROUTE}/{${MainDestinations.PIN_DETAIL_ID_KEY}}",
+            arguments = listOf(
+                navArgument(MainDestinations.PIN_DETAIL_ID_KEY) { type = NavType.LongType }
+            )
+        ) { backStackEntry ->
+            val pinId = backStackEntry.arguments?.getLong(MainDestinations.PIN_DETAIL_ID_KEY) ?: 0L
+            PinDetailScreen(
+                pinId = pinId,
+                onBackClick = { actions.upPress(backStackEntry) }
             )
         }
 
@@ -95,7 +114,11 @@ fun NavGraph(
  */
 class MainActions(navController: NavHostController) {
     val onboardingComplete: () -> Unit = {
-        navController.popBackStack()
+        navController.navigate(MainDestinations.HOME_DISCOVER_ROUTE) {
+            popUpTo(MainDestinations.ONBOARDING_ROUTE) {
+                inclusive = true
+            }
+        }
     }
 
     // Used from HOME_DISCOVER_ROUTE
@@ -119,6 +142,12 @@ class MainActions(navController: NavHostController) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         if (from.lifecycleIsResumed()) {
             navController.navigateUp()
+        }
+    }
+
+    val openPinDetail: (Long, NavBackStackEntry) -> Unit = { pinId, from ->
+        if (from.lifecycleIsResumed()) {
+            navController.navigate("${MainDestinations.PIN_DETAIL_ROUTE}/$pinId")
         }
     }
 }

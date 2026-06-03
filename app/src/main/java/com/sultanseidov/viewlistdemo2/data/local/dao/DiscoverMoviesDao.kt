@@ -13,7 +13,7 @@ interface DiscoverMoviesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDiscoverMovies(discoverMovies: List<MovieModel>)
 
-    @Query("SELECT * FROM movies_new_table")
+    @Query("SELECT * FROM movies_new_table ORDER BY page ASC")
     fun getAllDiscoverMovies(): PagingSource<Int, MovieModel>
 
     @Query("DELETE FROM movies_new_table")

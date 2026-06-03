@@ -1,10 +1,7 @@
 package com.sultanseidov.viewlistdemo2.screens.common
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +16,7 @@ fun LoadingView(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
     }
 }
 
@@ -28,7 +25,8 @@ fun LoadingItem() {
     CircularProgressIndicator(
         modifier = Modifier.fillMaxWidth()
             .padding(16.dp)
-            .wrapContentWidth(Alignment.CenterHorizontally)
+            .wrapContentWidth(Alignment.CenterHorizontally),
+        color = MaterialTheme.colorScheme.primary
     )
 }
 
@@ -47,8 +45,8 @@ fun ErrorItem(
             text = message,
             maxLines = 1,
             modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.h6,
-            color = Color.Red
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.error
         )
         OutlinedButton(onClick = onClickRetry) {
             Text(text = "Try again")

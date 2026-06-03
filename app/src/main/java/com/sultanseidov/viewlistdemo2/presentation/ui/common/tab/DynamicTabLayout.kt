@@ -3,9 +3,10 @@ package com.sultanseidov.viewlistdemo2.presentation.ui.common.tab
 import android.content.ContentValues
 import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.ExperimentalPagingApi
@@ -26,7 +27,6 @@ fun TabScreen(genreGroups: List<GenresMovieModel>) {
     if (genreGroups.isNotEmpty()) {
 
         val pagerState = rememberPagerState()
-        //val pagerState = rememberPagerState(pageCount = genreGroups.size)
 
         Column {
             Tabs(pagerState = pagerState, tabTitles = genreGroups.map { it.name })
@@ -34,7 +34,7 @@ fun TabScreen(genreGroups: List<GenresMovieModel>) {
         }
 
     } else {
-        Text("No Data")
+        Text("No Data", color = MaterialTheme.colorScheme.onBackground)
     }
 }
 
@@ -43,13 +43,18 @@ fun TabScreen(genreGroups: List<GenresMovieModel>) {
 fun Tabs(pagerState: PagerState, tabTitles: List<String>) {
     val scope = rememberCoroutineScope()
 
-    ScrollableTabRow(selectedTabIndex = pagerState.currentPage) {
+    ScrollableTabRow(
+        selectedTabIndex = pagerState.currentPage,
+        containerColor = MaterialTheme.colorScheme.background,
+        contentColor = MaterialTheme.colorScheme.primary,
+        edgePadding = 16.dp
+    ) {
         tabTitles.forEachIndexed { index, _ ->
             Tab(
                 text = {
                     Text(
                         tabTitles[index],
-                        color = if (pagerState.currentPage == index) Color.White else Color.LightGray
+                        style = MaterialTheme.typography.labelLarge
                     )
                 },
                 selected = pagerState.currentPage == index,
@@ -57,7 +62,9 @@ fun Tabs(pagerState: PagerState, tabTitles: List<String>) {
                     scope.launch {
                         pagerState.animateScrollToPage(index)
                     }
-                }
+                },
+                selectedContentColor = MaterialTheme.colorScheme.primary,
+                unselectedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
         }
     }
@@ -72,15 +79,12 @@ fun TabsContent(
     searchViewModel: SearchViewModel = hiltViewModel()
 ) {
     fun launch() {
-        searchViewModel.fetchDiscoverMovies(genreGroups[pagerState.currentPage].id.toString())
-        //searchViewModel.fetchDiscoverTvShows(genreGroups[pagerState.currentPage].id.toString())
-
+        //searchViewModel.fetchDiscoverMovies(genreGroups[pagerState.currentPage].id.toString())
     }
 
     launch()
 
-    val movies = searchViewModel.discoverMoviesState.collectAsLazyPagingItems()
-    //val tvShows = searchViewModel.discoverTvShowsState.collectAsLazyPagingItems()
+    //val movies = searchViewModel.discoverMoviesState.collectAsLazyPagingItems()
 
     HorizontalPager(count = genreGroups.size, state = pagerState) { page ->
         Log.d(ContentValues.TAG, "TabsContent: $page")
@@ -88,13 +92,7 @@ fun TabsContent(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-
-            MovieList(lazyMovieItems = movies)
-            //TvShowsList(lazyMovieItems = tvShows)
-
+           // MovieList(lazyMovieItems = movies)
         }
-
     }
 }
-
-

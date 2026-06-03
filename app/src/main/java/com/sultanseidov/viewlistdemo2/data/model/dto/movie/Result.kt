@@ -1,12 +1,13 @@
 package com.sultanseidov.viewlistdemo2.data.model.dto.movie
 
-import androidx.room.PrimaryKey
+import com.sultanseidov.viewlistdemo2.data.model.dto.genre.Genre
 
 data class Result(
     val id: Int,
     val adult: Boolean?,
     val backdrop_path: String?,
     val genre_ids: List<Int>?,
+    val genres: List<Genre>?,
     val original_language: String?,
     val original_title: String?,
     val overview: String?,

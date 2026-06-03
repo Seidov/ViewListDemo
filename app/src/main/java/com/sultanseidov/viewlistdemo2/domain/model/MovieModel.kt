@@ -6,6 +6,7 @@ import com.sultanseidov.viewlistdemo2.util.Constants
 
 @Entity(tableName = Constants.MOVIES_NEW_TABLE)
 data class MovieModel(
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     val adult: Boolean?,
     val backdrop_path: String?,
@@ -19,11 +20,9 @@ data class MovieModel(
     val title: String?,
     val video: Boolean?,
     val vote_average: Double?,
-    val vote_count: Int?
-) {
-    @PrimaryKey(autoGenerate = true)
-    var pk: Long = 0
-}
+    val vote_count: Int?,
+    val page: Int = 0,
+)
 
 fun MovieModel.toMovieViewList(): MoviesViewList {
     return MoviesViewList(

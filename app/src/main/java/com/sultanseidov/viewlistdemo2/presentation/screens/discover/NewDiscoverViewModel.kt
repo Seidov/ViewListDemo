@@ -1,68 +1,86 @@
 package com.sultanseidov.viewlistdemo2.presentation.screens.discover
 
 import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sultanseidov.viewlistdemo2.data.model.base.ResourceState
-import com.sultanseidov.viewlistdemo2.data.repository.RepositoryImpl
-import com.sultanseidov.viewlistdemo2.domain.model.MovieModel
-import com.sultanseidov.viewlistdemo2.domain.model.TvShowModel
-import com.sultanseidov.viewlistdemo2.domain.usecase.discover.DiscoverUseCase
+import com.sultanseidov.viewlistdemo2.data.local.dao.PinDao
+import com.sultanseidov.viewlistdemo2.data.local.entity.DiscoveryMediaEntity
+import com.sultanseidov.viewlistdemo2.domain.repository.IMovieRepository
+import com.sultanseidov.viewlistdemo2.domain.usecase.pin.WatchClassificationPipelineUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+data class DiscoveryTabItem(
+    val tag: String,
+    val title: String,
+    val mediaType: String,
+    val genres: String
+)
 
 @ExperimentalPagingApi
 @HiltViewModel
 class NewDiscoverViewModel @Inject constructor(
-    private val discoverUseCase: DiscoverUseCase
-) : ViewModel(){
+    private val pinDao: PinDao,
+    private val repository: IMovieRepository,
+    private val watchClassificationPipelineUseCase: WatchClassificationPipelineUseCase
+) : ViewModel() {
 
-    private val _moviesState: MutableStateFlow<PagingData<MovieModel>> = MutableStateFlow(value = PagingData.empty())
-    val moviesState: MutableStateFlow<PagingData<MovieModel>> get() = _moviesState
+    // Real-time dynamic tabs from DB + Static ones
+    val tabs: StateFlow<List<DiscoveryTabItem>> = pinDao.getActivePinsFlow().map { pins ->
+        val staticTabs = listOf(
+            DiscoveryTabItem("MOVIES", "Movies", "MOVIE", ""),
+            DiscoveryTabItem("TV_SHOWS", "TV Shows", "TV", "")
+        )
+        val dynamicTabs = pins.map { pin ->
+            DiscoveryTabItem(
+                tag = "PIN_${pin.pinId}",
+                title = pin.title,
+                mediaType = "MOVIE", // Pins are currently movie-centric in classification
+                genres = pin.dominantGenres.joinToString(",")
+            )
+        }
+        staticTabs + dynamicTabs
+    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private val _tvShowsState: MutableStateFlow<PagingData<TvShowModel>> = MutableStateFlow(value = PagingData.empty())
-    val tvShowsState: MutableStateFlow<PagingData<TvShowModel>> get() = _tvShowsState
+    private val _selectedTabIndex = MutableStateFlow(0)
+    val selectedTabIndex: StateFlow<Int> = _selectedTabIndex.asStateFlow()
 
-    init {
-        onEvent(DiscoverEvent.GetHome)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val pagingDataFlow: Flow<PagingData<DiscoveryMediaEntity>> = combine(tabs, _selectedTabIndex) { tabList, index ->
+        if (tabList.isEmpty()) null else tabList.getOrNull(index)
+    }.filterNotNull()
+     .flatMapLatest { tab ->
+        repository.getDiscoveryFlowByTag(tab.tag, tab.mediaType, tab.genres)
+    }.cachedIn(viewModelScope)
+
+    private val _isClassifying = MutableStateFlow(false)
+    val isClassifying: StateFlow<Boolean> = _isClassifying.asStateFlow()
+
+    fun onTabChanged(index: Int) {
+        _selectedTabIndex.value = index
     }
 
     fun onEvent(event: DiscoverEvent) {
-        viewModelScope.launch {
-            when (event) {
-                is DiscoverEvent.GetHome -> {
-                    getMovies()
-                    getTvShows()
+        when (event) {
+            is DiscoverEvent.GetHome -> { }
+            is DiscoverEvent.OnListClicked -> {
+                viewModelScope.launch {
+                    _isClassifying.value = true
+                    try {
+                        watchClassificationPipelineUseCase(event.movieId)
+                    } catch (e: Exception) {
+                        Log.e("NewDiscoverViewModel", "Classification error: ${e.message}")
+                    } finally {
+                        _isClassifying.value = false
+                    }
                 }
             }
         }
     }
-
-    private suspend fun getMovies() {
-        discoverUseCase.getDiscoverMoviesUseCase.execute(Unit)
-            .distinctUntilChanged()
-            .cachedIn(viewModelScope)
-            .collect {
-                _moviesState.value = it
-            }
-    }
-
-    private suspend fun getTvShows() {
-        discoverUseCase.getDiscoverTVShowsUseCase.execute(Unit)
-            .distinctUntilChanged()
-            .cachedIn(viewModelScope)
-            .collect {
-                _tvShowsState.value = it
-            }
-    }
-
 }

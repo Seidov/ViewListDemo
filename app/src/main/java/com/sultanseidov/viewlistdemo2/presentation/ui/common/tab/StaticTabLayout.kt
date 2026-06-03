@@ -3,7 +3,8 @@ package com.sultanseidov.viewlistdemo2.presentation.ui.common.tab
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
+import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -14,7 +15,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.sultanseidov.viewlistdemo2.domain.model.MovieModel
 import com.sultanseidov.viewlistdemo2.domain.model.TvShowModel
@@ -42,27 +42,30 @@ fun StaticPagerScreen(
         )
     }
 
-
-
-    var movies = viewListViewModel.discoverMoviesState.collectAsLazyPagingItems()
-    var tvShows = viewListViewModel.discoverTvShowsState.collectAsLazyPagingItems()
-
-
+    //val movies = viewListViewModel.discoverMoviesState.collectAsLazyPagingItems()
+    //val tvShows = viewListViewModel.discoverTvShowsState.collectAsLazyPagingItems()
 
     Column {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
+            containerColor = MaterialTheme.colorScheme.background,
+            contentColor = MaterialTheme.colorScheme.primary,
             indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-                )
+                if (pagerState.currentPage < tabPositions.size) {
+                    TabRowDefaults.SecondaryIndicator(
+                        Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             },
         ) {
             pages.forEachIndexed { index, page ->
                 Tab(
-                    text = { Text(page.name) },
+                    text = { Text(page.name, style = MaterialTheme.typography.labelLarge) },
                     selected = pagerState.currentPage == index,
                     onClick = { scope.launch { pagerState.scrollToPage(index) } },
+                    selectedContentColor = MaterialTheme.colorScheme.primary,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
             }
         }
@@ -76,16 +79,12 @@ fun StaticPagerScreen(
                     .fillMaxSize()
             ) {
                 when (page) {
-
                     StaticPagerScreenPage.ForYouMovies -> {
-
-                        ForYouMoviesContent(movies)
+                        //ForYouMoviesContent(movies)
                     }
                     StaticPagerScreenPage.ForYouTvShows -> {
-
-                        ForYouTvShowsContent(tvShows)
+                        //ForYouTvShowsContent(tvShows)
                     }
-
                 }
             }
         }
